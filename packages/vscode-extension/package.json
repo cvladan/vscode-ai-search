@@ -3,7 +3,7 @@
     "displayName": "AI Search",
     "publisher": "jao",
     "description": "Semantic search and indexing using embeddings, vector search and re-ranking.",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "private": true,
     "engines": {
         "vscode": "^1.74.0"
