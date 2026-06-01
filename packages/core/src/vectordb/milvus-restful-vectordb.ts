@@ -194,7 +194,7 @@ export class MilvusRestfulVectorDatabase implements VectorDatabase {
             const collectionSchema: any = {
                 collectionName,
                 dbName: restfulConfig.database,
-                description: description || `Claude Context collection: ${collectionName}`,
+                description: description || `AI Search collection: ${collectionName}`,
                 schema: {
                     enableDynamicField: false,
                     fields: [

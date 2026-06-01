@@ -76,7 +76,7 @@ describe('Context indexCodebase AbortSignal support', () => {
     let originalHybridMode: string | undefined;
 
     beforeEach(async () => {
-        tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'claude-context-abort-'));
+        tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'ai-search-abort-'));
         const homeDir = path.join(tempRoot, 'home');
         await fs.mkdir(homeDir, { recursive: true });
         originalHome = process.env.HOME;

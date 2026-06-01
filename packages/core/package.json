@@ -1,7 +1,7 @@
 {
     "name": "@ai-search/core",
     "version": "0.2.5",
-    "description": "Core indexing engine for AI Search (started from @zilliz/claude-context-core)",
+    "description": "Core indexing engine for AI Search",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {

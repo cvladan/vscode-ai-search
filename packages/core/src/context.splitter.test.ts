@@ -77,7 +77,7 @@ describe('Context request-scoped splitters', () => {
     let originalHybridMode: string | undefined;
 
     beforeEach(async () => {
-        tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'claude-context-splitter-'));
+        tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'ai-search-splitter-'));
         const homeDir = path.join(tempRoot, 'home');
         await fs.mkdir(homeDir, { recursive: true });
         originalHome = process.env.HOME;
