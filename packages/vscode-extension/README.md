@@ -1,6 +1,6 @@
 # AI Search
 
-Semantic code search for VS Code / VSCodium. Index your codebase into a vector database
+Semantic search for VS Code / VSCodium. Index your codebase into a vector database
 and search it by meaning, from the editor sidebar.
 
 > Started from [zilliztech/claude-context](https://github.com/zilliztech/claude-context)

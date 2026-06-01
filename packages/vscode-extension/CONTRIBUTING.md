@@ -59,7 +59,7 @@ Press `F5` to launch Extension Development Host
 
 ## Extension Features
 
-- Semantic code search within VSCode
+- Semantic search within VSCode
 - Integration with Claude Context core
 - Progress indicators for indexing
 - Search results in sidebar

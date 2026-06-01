@@ -4,7 +4,7 @@ Guidance for humans and AI agents working in this repository.
 
 ## What this is
 
-A semantic code search extension for VS Code / VSCodium. It **started from**
+A semantic search extension for VS Code / VSCodium. It **started from**
 [zilliztech/claude-context](https://github.com/zilliztech/claude-context) (specifically
 its VS Code extension package and core engine), and then diverged. It is **not a fork**;
 treat it as its own project. Notable changes from upstream:

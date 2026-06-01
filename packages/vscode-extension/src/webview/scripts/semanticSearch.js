@@ -230,7 +230,7 @@ class SemanticSearchController {
         if (hasIndex) {
             this.searchButton.title = 'Search the indexed codebase';
         } else {
-            this.searchButton.title = 'Please click "Index Current Codebase" first to create an index';
+            this.searchButton.title = 'Please click "Index Current Folder" first to create an index';
         }
     }
 
@@ -323,7 +323,7 @@ class SemanticSearchController {
                 break;
 
             case 'indexComplete':
-                this.indexButton.textContent = 'Index Current Codebase';
+                this.indexButton.textContent = 'Index Current Folder';
                 this.indexButton.disabled = false;
                 break;
 
