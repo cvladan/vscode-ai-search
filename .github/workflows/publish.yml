@@ -3,17 +3,15 @@ name: Publish Extension
 # Publishes the extension to the VS Code Marketplace and Open VSX.
 # Triggered by pushing a version tag (e.g. `git tag v0.1.1 && git push --tags`),
 # or manually from the Actions tab.
+#
+# Uses the official CLIs directly (@vscode/vsce + ovsx) instead of a third-party
+# wrapper action, so everything runs on the Node version we set up (no deprecated
+# action runtimes) and on the latest official tooling.
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
-
-env:
-  # HaaLeo/publish-vscode-extension still ships on the Node 20 action runtime.
-  # Force every JS action to run on the Node 24 runtime so nothing uses the
-  # deprecated Node 20 runtime.
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   publish:
@@ -25,31 +23,28 @@ jobs:
         with:
           node-version: '24'
 
-      # The native vector-DB / tree-sitter modules are NOT needed to build or
-      # publish the extension: webpack externalizes them and they are loaded
-      # lazily at runtime. Skipping install scripts avoids compiling native
-      # binaries, which keeps the build fast and lets it run on the latest Node.
+      # Native vector-DB / tree-sitter modules are not needed to build or publish
+      # the extension (webpack externalizes them; they load lazily at runtime),
+      # so skip install scripts — faster, and no native prebuild concerns.
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
       - name: Build core engine
         run: npm run build:core
 
-      # Packages the .vsix once (runs the extension's webpack build via
-      # vscode:prepublish) and publishes it to Open VSX. The packaged file path
-      # is exported so the next step reuses the exact same artifact.
-      - name: Publish to Open VSX
-        id: openvsx
-        uses: HaaLeo/publish-vscode-extension@v2
-        with:
-          pat: ${{ secrets.OVSX_PAT }}
-          packagePath: packages/vscode-extension
-          dependencies: false
+      # Package the .vsix once, then publish that exact artifact to both registries.
+      - name: Package extension
+        working-directory: packages/vscode-extension
+        run: npx --yes @vscode/vsce package --no-dependencies -o ai-search.vsix
 
       - name: Publish to VS Code Marketplace
-        uses: HaaLeo/publish-vscode-extension@v2
-        with:
-          pat: ${{ secrets.VSCE_PAT }}
-          registryUrl: https://marketplace.visualstudio.com
-          extensionFile: ${{ steps.openvsx.outputs.vsixPath }}
-          dependencies: false
+        working-directory: packages/vscode-extension
+        run: npx --yes @vscode/vsce publish --no-dependencies --packagePath ai-search.vsix
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: Publish to Open VSX
+        working-directory: packages/vscode-extension
+        run: npx --yes ovsx publish ai-search.vsix
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
