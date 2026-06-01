@@ -18,11 +18,11 @@ model reorders those results for better relevance.
 
 ## Features
 
-- 🔍 **Semantic search** over your whole codebase, from the activity-bar sidebar.
-- 🌳 **AST-aware chunking** for js/ts, python, java, c/c++, go, rust, c#, scala, **php**, **ruby**.
-- 📝 **Markdown-aware chunking** using a real Markdown AST, splitting by headings and `---`.
-- 🔌 **Embedding providers**: OpenAI, **OpenRouter**, VoyageAI, Ollama (local), Gemini.
-- 💾 **Vector databases**: Milvus / Zilliz Cloud (default, REST), **LanceDB** (local), **Local FAISS+SQLite** (local).
+- **Semantic search** over your whole codebase, from the activity-bar sidebar.
+- **AST-aware chunking** for js/ts, python, java, c/c++, go, rust, c#, scala, **php**, **ruby**.
+- **Markdown-aware chunking** using a real Markdown AST, splitting by headings and `---`.
+- **Embedding providers**: OpenAI, **OpenRouter**, VoyageAI, Ollama (local), Gemini.
+- **Vector databases**: Milvus / Zilliz Cloud (default, REST), **LanceDB** (local), **Local FAISS+SQLite** (local).
 
 ## Quick start (run it locally in VSCodium)
 
