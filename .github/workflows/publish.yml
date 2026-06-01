@@ -9,18 +9,28 @@ on:
       - 'v*'
   workflow_dispatch:
 
+env:
+  # HaaLeo/publish-vscode-extension still ships on the Node 20 action runtime.
+  # Force every JS action to run on the Node 24 runtime so nothing uses the
+  # deprecated Node 20 runtime.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
 
+      # The native vector-DB / tree-sitter modules are NOT needed to build or
+      # publish the extension: webpack externalizes them and they are loaded
+      # lazily at runtime. Skipping install scripts avoids compiling native
+      # binaries, which keeps the build fast and lets it run on the latest Node.
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build core engine
         run: npm run build:core

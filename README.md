@@ -23,7 +23,7 @@ database and search it by meaning instead of by keyword, right from the editor s
 
 ## Quick start (run it locally in VSCodium)
 
-You need **Node.js ≥ 20** and **npm**.
+You need **Node.js ≥ 22** and **npm**.
 
 ```bash
 # 1. install dependencies (workspace root)
