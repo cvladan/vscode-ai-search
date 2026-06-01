@@ -23,12 +23,12 @@ and search it by meaning, from the editor sidebar.
 
 ### Settings
 
-- `aiSearch.embeddingProvider.provider` — `OpenAI` / `OpenRouter` / `VoyageAI` / `Ollama` / `Gemini`
+- `aiSearch.embeddingProvider.provider`: `OpenAI` / `OpenRouter` / `VoyageAI` / `Ollama` / `Gemini`
 - `aiSearch.embeddingProvider.model`, `.apiKey`, `.baseURL`, `.host` (Ollama)
-- `aiSearch.vectorDatabase.provider` — `Milvus` / `LanceDB` / `Local`
-- `aiSearch.vectorDatabase.dataDir` — folder for local DBs (default `~/.ai-search`)
+- `aiSearch.vectorDatabase.provider`: `Milvus` / `LanceDB` / `Local`
+- `aiSearch.vectorDatabase.dataDir`: folder for local DBs (default `~/.ai-search`)
 - `aiSearch.milvus.address`, `.token`
-- `aiSearch.splitter.type` — `ast` (default) or `recursive`; `.chunkSize`, `.chunkOverlap`
+- `aiSearch.splitter.type`: `ast` (default) or `recursive`; `.chunkSize`, `.chunkOverlap`
 
 > LanceDB / Local backends use native modules and work best when running from source.
 > The **Milvus (REST)** backend needs no native modules.

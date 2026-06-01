@@ -6,14 +6,14 @@
 - **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search
 - **Open VSX (VSCodium):** https://open-vsx.org/extension/jao/ai-semantic-search
 
-Semantic search for **VS Code / VSCodium**. Index your codebase — or just a folder of
-Markdown/text files — into a vector database and search it by meaning instead of by
+Semantic search for **VS Code / VSCodium**. Index your codebase (or just a folder of
+Markdown/text files) into a vector database and search it by meaning instead of by
 keyword, right from the editor sidebar. The pipeline is: an **embedding model** turns your
 files into vectors → **vector search** finds candidates → and, optionally, a **re-ranking**
 model reorders those results for better relevance.
 
 > This project **started from** [zilliztech/claude-context](https://github.com/zilliztech/claude-context)
-> (the VS Code extension package). It is an independent project — not a fork — and it
+> (the VS Code extension package). It is an independent project, not a fork, and it
 > incorporates several community improvements. See [AGENTS.md](AGENTS.md) for details.
 
 ## Features
@@ -62,18 +62,18 @@ Open **Settings** and search for `aiSearch`, or use the gear icon in the sidebar
    `OpenAI` · `OpenRouter` · `VoyageAI` · `Ollama` · `Gemini`. Set the model and API key.
    For a fully local setup pick **Ollama** (e.g. model `nomic-embed-text`).
 2. **Vector database** (`aiSearch.vectorDatabase.provider`):
-   - `Milvus` — default, talks to Milvus / Zilliz Cloud over REST (no native modules).
-   - `LanceDB` — embedded local database, stored under `~/.ai-search/lancedb`.
-   - `Local` — local FAISS + SQLite, stored under `~/.ai-search/local-db`.
+   - `Milvus`: default, talks to Milvus / Zilliz Cloud over REST (no native modules).
+   - `LanceDB`: embedded local database, stored under `~/.ai-search/lancedb`.
+   - `Local`: local FAISS + SQLite, stored under `~/.ai-search/local-db`.
 
    > LanceDB and Local use native modules. They work out of the box when you run from
-   > source (F5). In a `.vsix` installed without dependencies they may be unavailable —
+   > source (F5). In a `.vsix` installed without dependencies they may be unavailable;
    > use **Milvus** (REST) for the zero-native-dependency path. See [AGENTS.md](AGENTS.md).
 3. **Index** your codebase from the sidebar (or the `AI Search: Index Codebase` command), then search.
 
 ## Which files get indexed
 
-Indexing uses a strict **allowlist** of file extensions — the extension is checked
+Indexing uses a strict **allowlist** of file extensions. The extension is checked
 *before* a file is ever read, so binary files (video, images, audio, PDFs, archives,
 executables, …) are **never opened and never sent to the embedding model**. No wasted
 embedding calls on a `.mp4`.
@@ -93,7 +93,7 @@ allowlist, common noise is ignored regardless of extension: `node_modules/`, `di
 `build/`, `out/`, `.git/`, caches, logs, and minified/bundled files (`*.min.js`, etc.).
 
 The list lives in `DEFAULT_SUPPORTED_EXTENSIONS` in
-[`packages/core/src/context.ts`](packages/core/src/context.ts) — add or remove extensions
+[`packages/core/src/context.ts`](packages/core/src/context.ts). Add or remove extensions
 there if you want a different set.
 
 ## Splitter: AST vs. fallback (and where Markdown fits)
@@ -103,8 +103,8 @@ Two strategies are available (`aiSearch.splitter.type`, default `ast`):
 
 | | **AST splitter** (`ast`) | **Recursive splitter** (`recursive`) |
 |---|---|---|
-| How it works | Parses the file into a real syntax tree (tree-sitter) and cuts on **logical units**: functions, classes, methods, interfaces, traits… | Doesn't understand syntax — splits on separators (paragraph → line → word) up to `chunkSize`, with overlap. |
-| Chunk quality | High — each chunk is a coherent unit → better embeddings & search. | Good enough, language-agnostic. |
+| How it works | Parses the file into a real syntax tree (tree-sitter) and cuts on **logical units**: functions, classes, methods, interfaces, traits… | Doesn't understand syntax; it splits on separators (paragraph → line → word) up to `chunkSize`, with overlap. |
+| Chunk quality | High; each chunk is a coherent unit, so search quality is better. | Good enough, language-agnostic. |
 | Works for | Languages with a grammar (js/ts, py, java, c/c++, go, rust, c#, scala, php, ruby). | **Anything** (JSON, YAML, shell, plain text, unsupported languages). |
 
 They are **not** mutually exclusive. With the `ast` splitter selected, the recursive
@@ -120,7 +120,7 @@ the heading path (e.g. `Title > Section`) in each chunk's metadata. If `remark` 
 loaded it falls back to the recursive splitter too.
 
 > The original project used LangChain for the fallback. This project replaced it with a
-> small, dependency-free recursive splitter — same idea, far lighter dependency tree.
+> small, dependency-free recursive splitter; same idea, far lighter dependency tree.
 
 ## Re-ranking (optional, recommended)
 
@@ -152,12 +152,12 @@ Enable it in Settings (`aiSearch.reranker.*`):
   **↑ Re-rank results** button that appears above the results to reorder them. This keeps
   every search fast and only spends rerank calls when you ask for them.
 - If `reranker.apiKey` is empty **and** your embedding provider is already OpenRouter, that
-  key is reused automatically — no extra credentials needed.
+  key is reused automatically, so no extra credentials are needed.
 - `reranker.baseURL` is optional (defaults to `https://openrouter.ai/api/v1`); since the
   request/response is Cohere-compatible, you can point it at Cohere/Jina/Voyage instead.
 - On click, the extension fetches a larger candidate pool from the vector DB, reranks it,
   and shows the reordered top results. **If reranking fails for any reason, search silently
-  falls back to the normal vector-search order** — it never breaks search.
+  falls back to the normal vector-search order**; it never breaks search.
 
 ## Project layout
 
@@ -181,11 +181,11 @@ publishes to **both** marketplaces automatically when you push a version tag.
 
 **One-time setup**
 
-1. **VS Code Marketplace** — create a publisher named `jao` at
+1. **VS Code Marketplace**: create a publisher named `jao` at
    <https://marketplace.visualstudio.com/manage>, then create an Azure DevOps **Personal
    Access Token** (scope *Marketplace → Manage*).
    Docs: <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
-2. **Open VSX** — sign in at <https://open-vsx.org> with GitHub, create an **Access Token**
+2. **Open VSX**: sign in at <https://open-vsx.org> with GitHub, create an **Access Token**
    (Settings → Access Tokens), then create your namespace once:
    ```bash
    npx ovsx create-namespace jao -p <OPEN_VSX_TOKEN>
@@ -194,9 +194,9 @@ publishes to **both** marketplaces automatically when you push a version tag.
    - `VSCE_PAT` = the Azure DevOps token
    - `OVSX_PAT` = the Open VSX token
 
-**Each release** — easiest from VS Code: open the Command Palette → **Tasks: Run Task** →
+**Each release**, easiest from VS Code: open the Command Palette → **Tasks: Run Task** →
 **Release (bump version, tag & push)**, then pick `patch`, `minor`, or `major`. That bumps
-the extension version, commits, tags, and pushes — which triggers the publish workflow.
+the extension version, commits, tags, and pushes, which triggers the publish workflow.
 
 Equivalent from the terminal:
 

@@ -5,8 +5,8 @@ Guidance for humans and AI agents working in this repository.
 ## What this is
 
 A semantic code search extension for VS Code / VSCodium. It **started from**
-[zilliztech/claude-context](https://github.com/zilliztech/claude-context) — specifically
-its VS Code extension package and core engine — and then diverged. It is **not a fork**;
+[zilliztech/claude-context](https://github.com/zilliztech/claude-context) (specifically
+its VS Code extension package and core engine), and then diverged. It is **not a fork**;
 treat it as its own project. Notable changes from upstream:
 
 - Added **OpenRouter** embedding provider (based on upstream PR #381).
@@ -21,14 +21,14 @@ treat it as its own project. Notable changes from upstream:
 ## Layout
 
 ```
-packages/core               @ai-search/core — indexing engine (compiles to CommonJS)
+packages/core               @ai-search/core: indexing engine (compiles to CommonJS)
   src/embedding/            OpenAI(+OpenRouter), VoyageAI, Ollama, Gemini providers
   src/vectordb/             Milvus (gRPC + REST), Zilliz, LanceDB, Local (FAISS+SQLite)
   src/splitter/             ast-splitter, recursive-splitter (fallback), markdown-splitter
   src/reranker/             Reranker interface + OpenRouterReranker (Cohere-compatible /rerank)
-  src/context.ts            Context — orchestrates indexing & search
+  src/context.ts            Context: orchestrates indexing and search
   src/sync/                 Merkle-tree based incremental sync
-packages/vscode-extension   ai-semantic-search — the extension (bundled with webpack)
+packages/vscode-extension   ai-semantic-search: the extension (bundled with webpack)
   src/extension.ts          activate(); builds Context from settings
   src/config/configManager  reads/writes settings; provider & splitter registries
   src/webview/              sidebar UI (html/css/js + provider)
@@ -60,7 +60,7 @@ runs the `build extension (dev)` task first and opens an Extension Development H
 `core` is plain CommonJS used directly by Node (and by tests). The **extension** is a
 single webpack bundle (`target: node`) that runs in the VS Code extension host. Several
 core modules rely on native binaries that don't belong in a webpack bundle, so webpack
-rewrites them — see `packages/vscode-extension/webpack.config.js`:
+rewrites them; see `packages/vscode-extension/webpack.config.js`:
 
 - `@zilliz/milvus2-sdk-node` (gRPC) → **ignored** (`IgnorePlugin`). The extension uses
   `MilvusRestfulVectorDatabase` (pure HTTP) instead.
@@ -84,7 +84,7 @@ rewrites them — see `packages/vscode-extension/webpack.config.js`:
 
 ### WASM grammars
 `packages/vscode-extension/wasm/` holds the committed grammars. `php` and `ruby` are not
-committed — `copy-assets.js` copies them from the `tree-sitter-wasms` package into
+committed; `copy-assets.js` copies them from the `tree-sitter-wasms` package into
 `dist/wasm` at build time. The stub maps language → wasm filename in `LANGUAGE_PARSERS`.
 
 ## Dependency notes
@@ -113,7 +113,7 @@ then register it in `EMBEDDING_PROVIDERS` in `configManager.ts`, add it to the e
 extension `package.json` and to the dropdown in `webview/scripts/semanticSearch.js`.
 (OpenRouter is just `OpenAIEmbedding` with `baseURL = https://openrouter.ai/api/v1`.)
 
-**Reranking (on demand):** reranking is opt-in per request — `Context.semanticSearch(..., { rerank: true })`
+**Reranking (on demand):** reranking is opt-in per request: `Context.semanticSearch(..., { rerank: true })`
 over-fetches a candidate pool (`candidateK`) and `maybeRerank()` re-scores via the model and
 trims to `topK`; any failure falls back to vector order. Normal searches pass `rerank: false`.
 The UI triggers it from the **↑ Re-rank results** button (webview posts a `rerank` message →

@@ -14,7 +14,7 @@ import * as path from 'path';
 import type { IndexFlatIP, IndexFlatL2 } from 'faiss-node';
 
 // Native modules (faiss-node, sqlite3, sqlite) are loaded lazily so that simply
-// importing this class — which happens via the package barrel export — never
+// importing this class (which happens via the package barrel export) never
 // triggers loading native binaries. They are only required when a
 // LocalVectorDatabase is actually used.
 let _sqlite3: any = null;

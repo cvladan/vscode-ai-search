@@ -836,7 +836,7 @@ export class MilvusRestfulVectorDatabase implements VectorDatabase {
     /**
      * Get the number of entities (rows) in a collection.
      * Returns -1 on any failure (collection missing, RPC error, malformed response).
-     * -1 means "unknown" — callers must NOT treat it as "empty".
+     * -1 means "unknown"; callers must NOT treat it as "empty".
      *
      * Uses count(*) via /entities/query rather than /collections/get_stats: stats
      * are computed from sealed segments and lag recent inserts (returning 0 for

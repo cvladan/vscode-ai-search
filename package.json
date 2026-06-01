@@ -1,7 +1,7 @@
 {
     "name": "vscode-ai-search",
     "version": "0.1.0",
-    "description": "AI Code Search — semantic code search for VS Code / VSCodium. Started from zilliztech/claude-context.",
+    "description": "AI Search monorepo: semantic search for VS Code / VSCodium. Started from zilliztech/claude-context.",
     "private": true,
     "workspaces": [
         "packages/*"

@@ -322,7 +322,7 @@ export class ConfigManager {
      *
      * If reranking is enabled but no dedicated `reranker.apiKey` is set and the
      * embedding provider is OpenRouter, the OpenRouter embedding key (and base URL)
-     * is reused — so users who already configured OpenRouter embeddings get
+     * is reused, so users who already configured OpenRouter embeddings get
      * reranking with no extra credentials.
      */
     getReranker(): Reranker | undefined {
