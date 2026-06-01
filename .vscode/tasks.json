@@ -10,6 +10,32 @@
                 "reveal": "silent",
                 "panel": "shared"
             }
+        },
+        {
+            "label": "Release (bump version, tag & push)",
+            "type": "shell",
+            "command": "bash scripts/release.sh ${input:releaseType}",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "releaseType",
+            "type": "pickString",
+            "description": "Which part of the version to bump?",
+            "options": [
+                "patch",
+                "minor",
+                "major"
+            ],
+            "default": "patch"
         }
     ]
 }

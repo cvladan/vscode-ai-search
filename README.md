@@ -191,15 +191,17 @@ publishes to **both** marketplaces automatically when you push a version tag.
    - `VSCE_PAT` = the Azure DevOps token
    - `OVSX_PAT` = the Open VSX token
 
-**Each release** — just bump the version and push a tag:
+**Each release** — easiest from VS Code: open the Command Palette → **Tasks: Run Task** →
+**Release (bump version, tag & push)**, then pick `patch`, `minor`, or `major`. That bumps
+the extension version, commits, tags, and pushes — which triggers the publish workflow.
+
+Equivalent from the terminal:
 
 ```bash
-npm version patch -w ai-code-search                       # bumps the extension version
-git commit -am "Release v0.1.1" && git tag v0.1.1
-git push && git push --tags                               # the workflow publishes to both
+scripts/release.sh patch        # or: minor | major
 ```
 
-(You can also run it manually from the **Actions** tab via *Run workflow*.)
+(You can also trigger the workflow manually from the **Actions** tab via *Run workflow*.)
 
 ### Manual alternative (no CI)
 
