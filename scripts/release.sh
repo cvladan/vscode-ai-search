@@ -24,10 +24,16 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 echo "[release] Bumping ${RELEASE_TYPE} version of the extension..."
-npm version "${RELEASE_TYPE}" --no-git-tag-version -w ai-semantic-search >/dev/null
+npm version "${RELEASE_TYPE}" --no-git-tag-version -w ai-semantic-search >/dev/null 2>&1
 
 VERSION="$(node -p "require('./packages/vscode-extension/package.json').version")"
 TAG="v${VERSION}"
+
+# Keep the (private) workspace root and core package in sync with the extension,
+# so all package.json versions match the released version.
+echo "[release] Syncing root and core to ${VERSION} ..."
+npm version "${VERSION}" --no-git-tag-version --allow-same-version >/dev/null 2>&1
+npm version "${VERSION}" --no-git-tag-version --allow-same-version -w @ai-search/core >/dev/null 2>&1
 
 echo "[release] Committing and tagging ${TAG} ..."
 git commit -am "Release ${TAG}"
