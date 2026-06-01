@@ -28,7 +28,7 @@ packages/core               @ai-search/core — indexing engine (compiles to Com
   src/reranker/             Reranker interface + OpenRouterReranker (Cohere-compatible /rerank)
   src/context.ts            Context — orchestrates indexing & search
   src/sync/                 Merkle-tree based incremental sync
-packages/vscode-extension   ai-search — the extension (bundled with webpack)
+packages/vscode-extension   ai-semantic-search — the extension (bundled with webpack)
   src/extension.ts          activate(); builds Context from settings
   src/config/configManager  reads/writes settings; provider & splitter registries
   src/webview/              sidebar UI (html/css/js + provider)

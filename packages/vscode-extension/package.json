@@ -1,5 +1,5 @@
 {
-    "name": "ai-search",
+    "name": "ai-semantic-search",
     "displayName": "AI Search",
     "publisher": "jao",
     "description": "Semantic code search and indexing for VS Code / VSCodium. Started from zilliztech/claude-context.",

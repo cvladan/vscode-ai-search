@@ -1,10 +1,10 @@
 # AI Search
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/jao.ai-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=jao.ai-search)
-[![Open VSX](https://img.shields.io/open-vsx/v/jao/ai-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/jao/ai-search)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/jao.ai-semantic-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search)
+[![Open VSX](https://img.shields.io/open-vsx/v/jao/ai-semantic-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/jao/ai-semantic-search)
 
-- **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=jao.ai-search
-- **Open VSX (VSCodium):** https://open-vsx.org/extension/jao/ai-search
+- **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search
+- **Open VSX (VSCodium):** https://open-vsx.org/extension/jao/ai-semantic-search
 
 Semantic code search for **VS Code / VSCodium**. Index your codebase into a vector
 database and search it by meaning instead of by keyword, right from the editor sidebar.
@@ -45,8 +45,8 @@ Then either **debug it** or **install the packaged extension**:
 ### B) Install the packaged `.vsix`
 
 ```bash
-npm run package:vscode      # produces packages/vscode-extension/ai-search-<version>.vsix
-codium --install-extension packages/vscode-extension/ai-search-*.vsix
+npm run package:vscode      # produces packages/vscode-extension/ai-semantic-search-<version>.vsix
+codium --install-extension packages/vscode-extension/ai-semantic-search-*.vsix
 ```
 
 (or in VSCodium: **Extensions → … → Install from VSIX…**)
@@ -206,10 +206,10 @@ scripts/release.sh patch        # or: minor | major
 ### Manual alternative (no CI)
 
 ```bash
-npm run package:vscode                                    # -> packages/vscode-extension/ai-search-<version>.vsix
+npm run package:vscode                                    # -> packages/vscode-extension/ai-semantic-search-<version>.vsix
 cd packages/vscode-extension
-npx @vscode/vsce publish -i ai-search-*.vsix -p <AZURE_DEVOPS_PAT>
-npx ovsx publish        ai-search-*.vsix -p <OPEN_VSX_TOKEN>
+npx @vscode/vsce publish -i ai-semantic-search-*.vsix -p <AZURE_DEVOPS_PAT>
+npx ovsx publish        ai-semantic-search-*.vsix -p <OPEN_VSX_TOKEN>
 ```
 
 ## License

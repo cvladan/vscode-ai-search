@@ -24,7 +24,7 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 echo "[release] Bumping ${RELEASE_TYPE} version of the extension..."
-npm version "${RELEASE_TYPE}" --no-git-tag-version -w ai-search >/dev/null
+npm version "${RELEASE_TYPE}" --no-git-tag-version -w ai-semantic-search >/dev/null
 
 VERSION="$(node -p "require('./packages/vscode-extension/package.json').version")"
 TAG="v${VERSION}"
