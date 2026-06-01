@@ -1,0 +1,482 @@
+import * as vscode from 'vscode';
+import { OpenAIEmbedding, OpenAIEmbeddingConfig, VoyageAIEmbedding, VoyageAIEmbeddingConfig, OllamaEmbedding, OllamaEmbeddingConfig, GeminiEmbedding, GeminiEmbeddingConfig, MilvusConfig, SplitterType, SplitterConfig, AstCodeSplitter, RecursiveCharacterSplitter, OpenRouterReranker, Reranker } from '@ai-code-search/core';
+
+// Simplified Milvus configuration interface for frontend
+export interface MilvusWebConfig {
+    address: string;
+    token?: string;
+}
+
+export type EmbeddingProviderConfig = {
+    provider: 'OpenAI';
+    config: OpenAIEmbeddingConfig;
+} | {
+    provider: 'VoyageAI';
+    config: VoyageAIEmbeddingConfig;
+} | {
+    provider: 'Ollama';
+    config: OllamaEmbeddingConfig;
+} | {
+    provider: 'Gemini';
+    config: GeminiEmbeddingConfig;
+} | {
+    provider: 'OpenRouter';
+    config: OpenAIEmbeddingConfig;
+};
+
+export type SplitterProviderConfig = {
+    provider: 'AST';
+    config: { chunkSize?: number; chunkOverlap?: number };
+} | {
+    provider: 'Recursive';
+    config: { chunkSize?: number; chunkOverlap?: number };
+};
+
+export interface PluginConfig {
+    embeddingProvider?: EmbeddingProviderConfig;
+    splitterProvider?: SplitterProviderConfig;
+    milvusConfig?: MilvusWebConfig;
+    splitterConfig?: SplitterConfig;
+}
+
+type FieldDefinition = {
+    name: string;
+    type: string;
+    description: string;
+    inputType?: 'text' | 'password' | 'url' | 'select' | 'select-with-custom';
+    placeholder?: string;
+    required?: boolean;
+};
+
+// Unified provider configuration
+const EMBEDDING_PROVIDERS = {
+    'OpenAI': {
+        name: 'OpenAI',
+        class: OpenAIEmbedding,
+        requiredFields: [
+            { name: 'model', type: 'string', description: 'Model name to use', inputType: 'select-with-custom', required: true },
+            { name: 'apiKey', type: 'string', description: 'OpenAI API key', inputType: 'password', required: true }
+        ] as FieldDefinition[],
+        optionalFields: [
+            { name: 'baseURL', type: 'string', description: 'Custom API endpoint URL (optional)', inputType: 'url', placeholder: 'https://api.openai.com/v1' }
+        ] as FieldDefinition[],
+        defaultConfig: {
+            model: 'text-embedding-3-small'
+        }
+    },
+    'VoyageAI': {
+        name: 'VoyageAI',
+        class: VoyageAIEmbedding,
+        requiredFields: [
+            { name: 'model', type: 'string', description: 'Model name to use', inputType: 'select-with-custom', required: true },
+            { name: 'apiKey', type: 'string', description: 'VoyageAI API key', inputType: 'password', required: true }
+        ] as FieldDefinition[],
+        optionalFields: [] as FieldDefinition[],
+        defaultConfig: {
+            model: 'voyage-code-3'
+        }
+    },
+    'Ollama': {
+        name: 'Ollama',
+        class: OllamaEmbedding,
+        requiredFields: [
+            { name: 'model', type: 'string', description: 'Model name (e.g., nomic-embed-text, mxbai-embed-large)', inputType: 'text', required: true, placeholder: 'nomic-embed-text' }
+        ] as FieldDefinition[],
+        optionalFields: [
+            { name: 'host', type: 'string', description: 'Ollama server host URL', inputType: 'url', placeholder: 'http://127.0.0.1:11434' },
+            { name: 'keepAlive', type: 'string', description: 'Keep model alive duration', inputType: 'text', placeholder: '5m' }
+        ] as FieldDefinition[],
+        defaultConfig: {
+            model: 'nomic-embed-text',
+            host: 'http://127.0.0.1:11434',
+            keepAlive: '5m'
+        }
+    },
+    'Gemini': {
+        name: 'Gemini',
+        class: GeminiEmbedding,
+        requiredFields: [
+            { name: 'model', type: 'string', description: 'Model name to use', inputType: 'select-with-custom', required: true },
+            { name: 'apiKey', type: 'string', description: 'Google AI API key', inputType: 'password', required: true }
+        ] as FieldDefinition[],
+        optionalFields: [
+            { name: 'baseURL', type: 'string', description: 'Custom API endpoint URL (optional)', inputType: 'url', placeholder: 'https://generativelanguage.googleapis.com/v1beta' },
+            { name: 'outputDimensionality', type: 'number', description: 'Output dimension (supports Matryoshka representation)', inputType: 'text', placeholder: '3072' }
+        ] as FieldDefinition[],
+        defaultConfig: {
+            model: 'gemini-embedding-001'
+        }
+    },
+    'OpenRouter': {
+        name: 'OpenRouter',
+        class: OpenAIEmbedding,
+        requiredFields: [
+            { name: 'model', type: 'string', description: 'Model name to use', inputType: 'select-with-custom', required: true },
+            { name: 'apiKey', type: 'string', description: 'OpenRouter API key', inputType: 'password', required: true }
+        ] as FieldDefinition[],
+        optionalFields: [
+            { name: 'baseURL', type: 'string', description: 'Custom API endpoint URL (optional)', inputType: 'url', placeholder: 'https://openrouter.ai/api/v1' }
+        ] as FieldDefinition[],
+        defaultConfig: {
+            model: 'openai/text-embedding-3-small',
+            baseURL: 'https://openrouter.ai/api/v1'
+        },
+        models: {
+            'openai/text-embedding-3-small': {
+                dimension: 1536,
+                description: 'OpenRouter-hosted OpenAI text embedding model (recommended)'
+            }
+        }
+    }
+} as const;
+
+// Unified splitter provider configuration
+const SPLITTER_PROVIDERS = {
+    'AST': {
+        name: 'AST Splitter',
+        class: AstCodeSplitter,
+        requiredFields: [] as FieldDefinition[],
+        optionalFields: [
+            { name: 'chunkSize', type: 'number', description: 'Maximum chunk size in characters', inputType: 'text', placeholder: '1000' },
+            { name: 'chunkOverlap', type: 'number', description: 'Overlap between chunks in characters', inputType: 'text', placeholder: '200' }
+        ] as FieldDefinition[],
+        defaultConfig: {
+            chunkSize: 2500,
+            chunkOverlap: 300
+        }
+    },
+    'Recursive': {
+        name: 'Recursive Splitter',
+        class: RecursiveCharacterSplitter,
+        requiredFields: [] as FieldDefinition[],
+        optionalFields: [
+            { name: 'chunkSize', type: 'number', description: 'Maximum chunk size in characters', inputType: 'text', placeholder: '1000' },
+            { name: 'chunkOverlap', type: 'number', description: 'Overlap between chunks in characters', inputType: 'text', placeholder: '200' }
+        ] as FieldDefinition[],
+        defaultConfig: {
+            chunkSize: 1000,
+            chunkOverlap: 200
+        }
+    }
+} as const;
+
+export class ConfigManager {
+    private static readonly CONFIG_KEY = 'aiCodeSearch';
+    private context: vscode.ExtensionContext;
+
+    constructor(context: vscode.ExtensionContext) {
+        this.context = context;
+    }
+
+    /**
+     * Get embedding provider configuration information
+     */
+    private static getProviderInfo(provider: string) {
+        if (!(provider in EMBEDDING_PROVIDERS)) {
+            return null;
+        }
+        return EMBEDDING_PROVIDERS[provider as keyof typeof EMBEDDING_PROVIDERS];
+    }
+
+    /**
+     * Get splitter provider configuration information
+     */
+    private static getSplitterProviderInfo(provider: string) {
+        if (!(provider in SPLITTER_PROVIDERS)) {
+            return null;
+        }
+        return SPLITTER_PROVIDERS[provider as keyof typeof SPLITTER_PROVIDERS];
+    }
+
+    /**
+     * Build configuration object
+     */
+    private buildConfigObject(provider: string, vscodeConfig: vscode.WorkspaceConfiguration): any {
+        const providerInfo = ConfigManager.getProviderInfo(provider);
+        if (!providerInfo) return null;
+
+        const configObject: any = { ...providerInfo.defaultConfig };
+        const allFields = [...providerInfo.requiredFields, ...providerInfo.optionalFields];
+
+        // Read values for all fields
+        for (const field of allFields) {
+            const value = vscodeConfig.get<any>(`embeddingProvider.${field.name}`);
+            if (value !== undefined) {
+                configObject[field.name] = value;
+            }
+        }
+
+        // Validate required fields
+        for (const field of providerInfo.requiredFields) {
+            if (!configObject[field.name]) {
+                return null;
+            }
+        }
+
+        return configObject;
+    }
+
+    /**
+     * Get embedding provider configuration
+     */
+    getEmbeddingProviderConfig(): EmbeddingProviderConfig | undefined {
+        const config = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+        const provider = config.get<string>('embeddingProvider.provider');
+
+        if (!provider) return undefined;
+
+        const configObject = this.buildConfigObject(provider, config);
+        if (!configObject) return undefined;
+
+        return {
+            provider: provider as 'OpenAI' | 'VoyageAI' | 'Ollama' | 'Gemini' | 'OpenRouter',
+            config: configObject
+        };
+    }
+
+    /**
+     * Save embedding provider configuration
+     */
+    async saveEmbeddingProviderConfig(providerConfig: EmbeddingProviderConfig): Promise<void> {
+        // Defensive checks
+        if (!providerConfig) {
+            throw new Error('Provider config is undefined');
+        }
+
+        if (!providerConfig.config) {
+            throw new Error('Provider config.config is undefined');
+        }
+
+        const workspaceConfig = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+        const { provider, config } = providerConfig;
+
+        const providerInfo = ConfigManager.getProviderInfo(provider);
+        if (!providerInfo) {
+            throw new Error(`Unknown provider: ${provider}`);
+        }
+
+        // Save provider type
+        await workspaceConfig.update('embeddingProvider.provider', provider, vscode.ConfigurationTarget.Global);
+
+        // Save all fields
+        const allFields = [...providerInfo.requiredFields, ...providerInfo.optionalFields];
+        for (const field of allFields) {
+            const value = (config as any)[field.name];
+
+            // For empty strings, save undefined to avoid validation errors
+            const saveValue = (value === '' || value === null) ? undefined : value;
+
+            await workspaceConfig.update(
+                `embeddingProvider.${field.name}`,
+                saveValue,
+                vscode.ConfigurationTarget.Global
+            );
+        }
+    }
+
+    /**
+     * Create embedding instance
+     */
+    static createEmbeddingInstance(provider: string, config: any): any {
+        const providerInfo = ConfigManager.getProviderInfo(provider);
+        if (!providerInfo) {
+            throw new Error(`Unknown provider: ${provider}`);
+        }
+        return new providerInfo.class(config);
+    }
+
+    /**
+     * Get supported embedding providers
+     */
+    static getSupportedProviders(): Record<string, {
+        name: string;
+        models: Record<string, any>;
+        requiredFields: FieldDefinition[];
+        optionalFields: FieldDefinition[];
+        defaultConfig: any;
+    }> {
+        const result: any = {};
+
+        for (const [providerKey, providerInfo] of Object.entries(EMBEDDING_PROVIDERS)) {
+            // Ollama doesn't have getSupportedModels since users input model names manually.
+            // OpenRouter reuses OpenAIEmbedding internally, but its public model ids include the
+            // provider prefix, so expose the OpenRouter-specific default list when present.
+            const models = providerKey === 'Ollama' ? {} :
+                ('models' in providerInfo ? providerInfo.models : (providerInfo.class as any).getSupportedModels());
+
+            result[providerKey] = {
+                name: providerInfo.name,
+                models: models,
+                requiredFields: [...providerInfo.requiredFields],
+                optionalFields: [...providerInfo.optionalFields],
+                defaultConfig: providerInfo.defaultConfig
+            };
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Build a reranker instance from settings, or undefined when reranking is off.
+     *
+     * If reranking is enabled but no dedicated `reranker.apiKey` is set and the
+     * embedding provider is OpenRouter, the OpenRouter embedding key (and base URL)
+     * is reused — so users who already configured OpenRouter embeddings get
+     * reranking with no extra credentials.
+     */
+    getReranker(): Reranker | undefined {
+        const config = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+        const enabled = config.get<boolean>('reranker.enabled', false);
+        if (!enabled) {
+            return undefined;
+        }
+
+        const model = config.get<string>('reranker.model') || 'cohere/rerank-4-fast';
+        let apiKey = config.get<string>('reranker.apiKey') || '';
+        let baseURL = config.get<string>('reranker.baseURL') || '';
+
+        if (!apiKey) {
+            const emb = this.getEmbeddingProviderConfig();
+            if (emb && emb.provider === 'OpenRouter') {
+                apiKey = (emb.config as any).apiKey || '';
+                if (!baseURL) {
+                    baseURL = (emb.config as any).baseURL || '';
+                }
+            }
+        }
+
+        if (!apiKey) {
+            console.warn('[ConfigManager] Reranker is enabled but no API key is configured; reranking disabled.');
+            return undefined;
+        }
+
+        // Currently only the OpenRouter (Cohere-compatible) rerank endpoint is supported.
+        return new OpenRouterReranker({
+            apiKey,
+            model,
+            ...(baseURL ? { baseURL } : {})
+        });
+    }
+
+    /**
+     * Whether reranking is enabled and usable (has a resolvable API key).
+     * Used by the UI to decide whether to offer the on-demand "Re-rank" button.
+     */
+    isRerankerConfigured(): boolean {
+        return !!this.getReranker();
+    }
+
+    /**
+     * Get the selected vector database backend.
+     */
+    getVectorDatabaseProvider(): 'Milvus' | 'LanceDB' | 'Local' {
+        const config = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+        const provider = config.get<string>('vectorDatabase.provider');
+        if (provider === 'LanceDB' || provider === 'Local') {
+            return provider;
+        }
+        return 'Milvus';
+    }
+
+    /**
+     * Get the storage directory for local vector databases (LanceDB / Local).
+     * Returns undefined to let the backend pick its default (~/.ai-code-search).
+     */
+    getVectorDatabaseDataDir(): string | undefined {
+        const config = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+        const dir = config.get<string>('vectorDatabase.dataDir');
+        return dir && dir.trim() ? dir : undefined;
+    }
+
+    /**
+     * Get Milvus frontend configuration
+     */
+    getMilvusConfig(): MilvusWebConfig | undefined {
+        const config = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+        const address = config.get<string>('milvus.address');
+        const token = config.get<string>('milvus.token');
+
+        if (!address) return undefined;
+
+        return {
+            address,
+            token
+        };
+    }
+
+    /**
+     * Save Milvus frontend configuration
+     */
+    async saveMilvusConfig(milvusConfig: MilvusWebConfig): Promise<void> {
+        if (!milvusConfig) {
+            throw new Error('Milvus config is undefined');
+        }
+
+        if (!milvusConfig.address) {
+            throw new Error('Milvus address is required');
+        }
+
+        const workspaceConfig = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+
+        await workspaceConfig.update('milvus.address', milvusConfig.address, vscode.ConfigurationTarget.Global);
+        await workspaceConfig.update('milvus.token', milvusConfig.token ?? undefined, vscode.ConfigurationTarget.Global);
+    }
+
+    /**
+     * Convert frontend configuration to complete MilvusConfig
+     */
+    getMilvusFullConfig(): MilvusConfig | undefined {
+        const webConfig = this.getMilvusConfig();
+        if (!webConfig) return undefined;
+
+        // Convert simplified frontend config to complete config with reasonable defaults
+        return {
+            address: webConfig.address,
+            token: webConfig.token,
+            // Set default values
+            ssl: webConfig.address.startsWith('https://'), // Enable SSL if https address
+            // username and password are usually handled via token, so not set
+        };
+    }
+
+    /**
+     * Get splitter configuration
+     */
+    getSplitterConfig(): SplitterConfig | undefined {
+        const config = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+        const type = config.get<string>('splitter.type');
+        const chunkSize = config.get<number>('splitter.chunkSize');
+        const chunkOverlap = config.get<number>('splitter.chunkOverlap');
+
+        // Return default config if no type is set
+        if (!type) {
+            return {
+                type: SplitterType.AST,
+                chunkSize: 1000,
+                chunkOverlap: 200
+            };
+        }
+
+        return {
+            type: type as SplitterType,
+            chunkSize: chunkSize || 1000,
+            chunkOverlap: chunkOverlap || 200
+        };
+    }
+
+    /**
+     * Save splitter configuration
+     */
+    async saveSplitterConfig(splitterConfig: SplitterConfig): Promise<void> {
+        if (!splitterConfig) {
+            throw new Error('Splitter config is undefined');
+        }
+
+        const workspaceConfig = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);
+
+        await workspaceConfig.update('splitter.type', splitterConfig.type || SplitterType.AST, vscode.ConfigurationTarget.Global);
+        await workspaceConfig.update('splitter.chunkSize', splitterConfig.chunkSize || 1000, vscode.ConfigurationTarget.Global);
+        await workspaceConfig.update('splitter.chunkOverlap', splitterConfig.chunkOverlap || 200, vscode.ConfigurationTarget.Global);
+    }
+}

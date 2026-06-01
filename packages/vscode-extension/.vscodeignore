@@ -1,0 +1,19 @@
+# Source — only the bundled dist/ is needed at runtime
+src/**
+tsconfig.json
+copy-assets.js
+webpack.config.js
+.eslintrc*
+**/*.ts
+**/*.map
+
+# Build-input grammars (already copied into dist/wasm by the build)
+wasm/**
+
+# Misc
+**/.DS_Store
+*.vsix
+node_modules/**
+**/tsconfig.tsbuildinfo
+.tsbuildinfo
+CONTRIBUTING.md

@@ -1,0 +1,36 @@
+{
+    "name": "vscode-ai-search",
+    "version": "0.1.0",
+    "description": "AI Code Search — semantic code search for VS Code / VSCodium. Started from zilliztech/claude-context.",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "npm run build:core && npm run build:vscode",
+        "build:core": "npm run build -w @ai-code-search/core",
+        "build:vscode": "npm run webpack -w ai-code-search",
+        "compile:vscode": "npm run compile -w ai-code-search",
+        "dev:core": "npm run dev -w @ai-code-search/core",
+        "watch:vscode": "npm run watch -w ai-code-search",
+        "package:vscode": "npm run build:core && npm run webpack -w ai-code-search && npm run package -w ai-code-search",
+        "test:core": "npm run test -w @ai-code-search/core",
+        "typecheck": "npm run typecheck -w @ai-code-search/core && npm run typecheck -w ai-code-search",
+        "clean": "npm run clean -w @ai-code-search/core && npm run clean -w ai-code-search"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@typescript-eslint/eslint-plugin": "^8.31.1",
+        "@typescript-eslint/parser": "^8.31.1",
+        "eslint": "^9.25.1",
+        "rimraf": "^6.0.1",
+        "typescript": "^5.8.3"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "overrides": {
+        "ajv": "^8.17.1"
+    },
+    "license": "MIT"
+}

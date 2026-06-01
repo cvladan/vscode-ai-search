@@ -1,0 +1,16 @@
+node_modules/
+dist/
+out/
+*.vsix
+*.tsbuildinfo
+.tsbuildinfo
+packages/*/dist/
+packages/*/.tsbuildinfo
+.DS_Store
+*.log
+.env
+.env.local
+# local vector database data
+.ai-code-search/
+# Claude Code workspace
+.claude/

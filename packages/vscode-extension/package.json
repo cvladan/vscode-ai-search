@@ -1,0 +1,257 @@
+{
+    "name": "ai-code-search",
+    "displayName": "AI Code Search",
+    "publisher": "cvladan",
+    "description": "Semantic code search and indexing for VS Code / VSCodium. Started from zilliztech/claude-context.",
+    "version": "0.1.0",
+    "private": true,
+    "engines": {
+        "vscode": "^1.74.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "code",
+        "AI coding",
+        "agent",
+        "code search",
+        "semantic search",
+        "embeddings",
+        "index",
+        "search",
+        "navigation"
+    ],
+    "icon": "resources/icon.png",
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "aiCodeSearch.semanticSearch",
+                "title": "Semantic Search",
+                "category": "AI Code Search"
+            },
+            {
+                "command": "aiCodeSearch.indexCodebase",
+                "title": "Index Codebase",
+                "category": "AI Code Search"
+            },
+            {
+                "command": "aiCodeSearch.clearIndex",
+                "title": "Clear Index",
+                "category": "AI Code Search"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "aiCodeSearch.semanticSearch",
+                    "when": "editorHasSelection",
+                    "group": "navigation@100"
+                }
+            ]
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "aiCodeSearchSidebar",
+                    "title": "AI Code Search",
+                    "icon": "./resources/activity_bar.svg"
+                }
+            ]
+        },
+        "views": {
+            "aiCodeSearchSidebar": [
+                {
+                    "id": "semanticSearchView",
+                    "name": "AI Code Search",
+                    "type": "webview"
+                }
+            ]
+        },
+        "configuration": {
+            "title": "AI Code Search",
+            "properties": {
+                "aiCodeSearch.embeddingProvider.provider": {
+                    "type": "string",
+                    "enum": [
+                        "OpenAI",
+                        "OpenRouter",
+                        "VoyageAI",
+                        "Ollama",
+                        "Gemini"
+                    ],
+                    "default": "OpenAI",
+                    "description": "Embedding service provider"
+                },
+                "aiCodeSearch.embeddingProvider.model": {
+                    "type": "string",
+                    "description": "Embedding model to use"
+                },
+                "aiCodeSearch.embeddingProvider.apiKey": {
+                    "type": "string",
+                    "description": "API key for the embedding provider"
+                },
+                "aiCodeSearch.embeddingProvider.baseURL": {
+                    "type": "string",
+                    "description": "Custom API endpoint URL (optional)"
+                },
+                "aiCodeSearch.embeddingProvider.host": {
+                    "type": "string",
+                    "description": "Ollama server host URL (optional)"
+                },
+                "aiCodeSearch.embeddingProvider.keepAlive": {
+                    "type": "string",
+                    "description": "Keep model alive duration for Ollama (optional)"
+                },
+                "aiCodeSearch.embeddingProvider.outputDimensionality": {
+                    "type": "number",
+                    "description": "Output dimension for Gemini embedding (supports Matryoshka representation: 3072, 1536, 768, 256)"
+                },
+                "aiCodeSearch.vectorDatabase.provider": {
+                    "type": "string",
+                    "enum": [
+                        "Milvus",
+                        "LanceDB",
+                        "Local"
+                    ],
+                    "enumDescriptions": [
+                        "Milvus / Zilliz Cloud over the REST API (no local native modules required)",
+                        "LanceDB embedded local database (recommended for local-only use)",
+                        "Local FAISS + SQLite database stored on disk"
+                    ],
+                    "default": "Milvus",
+                    "description": "Vector database backend. LanceDB and Local run fully on your machine and need no server."
+                },
+                "aiCodeSearch.vectorDatabase.dataDir": {
+                    "type": "string",
+                    "description": "Storage directory for the local vector database (LanceDB/Local). Defaults to ~/.ai-code-search."
+                },
+                "aiCodeSearch.reranker.enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Re-rank vector search results with a dedicated rerank model for better relevance (second-stage retrieval)."
+                },
+                "aiCodeSearch.reranker.provider": {
+                    "type": "string",
+                    "enum": [
+                        "OpenRouter"
+                    ],
+                    "default": "OpenRouter",
+                    "description": "Rerank provider. OpenRouter exposes Cohere rerank models via POST /api/v1/rerank."
+                },
+                "aiCodeSearch.reranker.model": {
+                    "type": "string",
+                    "enum": [
+                        "cohere/rerank-4-fast",
+                        "cohere/rerank-4-pro",
+                        "cohere/rerank-v3.5"
+                    ],
+                    "enumDescriptions": [
+                        "Lowest latency, 32K context",
+                        "Highest accuracy (SOTA), 32K context",
+                        "Multilingual / semi-structured, 4K context"
+                    ],
+                    "default": "cohere/rerank-4-fast",
+                    "description": "Rerank model id (you may also type a custom Cohere-compatible model)."
+                },
+                "aiCodeSearch.reranker.apiKey": {
+                    "type": "string",
+                    "description": "API key for the rerank provider. If empty and the embedding provider is OpenRouter, that key is reused."
+                },
+                "aiCodeSearch.reranker.baseURL": {
+                    "type": "string",
+                    "description": "Custom rerank endpoint base URL (optional). Defaults to https://openrouter.ai/api/v1."
+                },
+                "aiCodeSearch.milvus.address": {
+                    "type": "string",
+                    "description": "Milvus server address (e.g., http://localhost:19530)"
+                },
+                "aiCodeSearch.milvus.token": {
+                    "type": "string",
+                    "description": "Milvus authentication token (optional)"
+                },
+                "aiCodeSearch.autoSync.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable automatic synchronization of workspace index every 5 minutes"
+                },
+                "aiCodeSearch.autoSync.intervalMinutes": {
+                    "type": "number",
+                    "default": 5,
+                    "minimum": 1,
+                    "maximum": 60,
+                    "description": "Auto-sync interval in minutes (1-60). This runs periodic sync to keep the index updated."
+                },
+                "aiCodeSearch.splitter.type": {
+                    "type": "string",
+                    "enum": [
+                        "langchain",
+                        "ast"
+                    ],
+                    "enumDescriptions": [
+                        "Language-aware text splitter with support for multiple programming languages",
+                        "AST-based code splitter that splits code by logical units (functions, classes, etc.)"
+                    ],
+                    "default": "ast",
+                    "description": "Code splitter type to use for breaking down code into chunks"
+                },
+                "aiCodeSearch.splitter.chunkSize": {
+                    "type": "number",
+                    "default": 1000,
+                    "minimum": 100,
+                    "maximum": 5000,
+                    "description": "Maximum size of each code chunk in characters"
+                },
+                "aiCodeSearch.splitter.chunkOverlap": {
+                    "type": "number",
+                    "default": 200,
+                    "minimum": 0,
+                    "maximum": 1000,
+                    "description": "Number of overlapping characters between consecutive chunks"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run webpack",
+        "compile": "npm run clean && tsc --build --force && node copy-assets.js",
+        "webpack": "npm run clean && webpack --mode production && node copy-assets.js",
+        "webpack:dev": "webpack --mode development && node copy-assets.js",
+        "watch": "tsc -watch -p ./",
+        "clean": "rimraf dist",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix",
+        "typecheck": "tsc --noEmit",
+        "package": "vsce package --no-dependencies",
+        "release": "vsce publish --no-dependencies"
+    },
+    "dependencies": {
+        "@ai-code-search/core": "*",
+        "web-tree-sitter": "^0.25.6"
+    },
+    "devDependencies": {
+        "@types/node": "20.x",
+        "@types/vscode": "^1.74.0",
+        "@typescript-eslint/eslint-plugin": "^8.31.1",
+        "@typescript-eslint/parser": "^8.31.1",
+        "@vscode/vsce": "^3.4.0",
+        "copy-webpack-plugin": "^12.0.2",
+        "eslint": "^9.25.1",
+        "source-map-loader": "^5.0.0",
+        "tree-sitter-wasms": "^0.1.11",
+        "ts-loader": "^9.5.2",
+        "typescript": "^5.8.3",
+        "webpack": "^5.99.9",
+        "webpack-cli": "^5.1.4"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cvladan/vscode-ai-search.git",
+        "directory": "packages/vscode-extension"
+    },
+    "license": "MIT"
+}
