@@ -1,6 +1,6 @@
 # AI Search
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/jao.ai-semantic-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search)
+[![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/jao.ai-semantic-search.svg)](https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search)
 [![Open VSX](https://img.shields.io/open-vsx/v/jao/ai-semantic-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/jao/ai-semantic-search)
 
 - **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search
