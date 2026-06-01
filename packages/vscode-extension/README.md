@@ -1,4 +1,4 @@
-# AI Code Search
+# AI Search
 
 Semantic code search for VS Code / VSCodium. Index your codebase into a vector database
 and search it by meaning, from the editor sidebar.
@@ -16,7 +16,7 @@ and search it by meaning, from the editor sidebar.
 
 ## Usage
 
-1. Open the **AI Code Search** view from the activity bar.
+1. Open the **AI Search** view from the activity bar.
 2. Configure an **embedding provider** and a **vector database** (gear icon, or Settings →
    search `aiSearch`).
 3. **Index** your codebase, then search.
@@ -39,3 +39,7 @@ local-development instructions.
 ## License
 
 MIT
+
+## Credits
+
+<a target="_blank" href="https://icons8.com/icon/JNzjznWAq3J5/search">Search</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>

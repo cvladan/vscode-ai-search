@@ -218,3 +218,7 @@ npx ovsx publish        ai-semantic-search-*.vsix -p <OPEN_VSX_TOKEN>
 ## License
 
 MIT. Started from [zilliztech/claude-context](https://github.com/zilliztech/claude-context) (also MIT).
+
+## Credits
+
+<a target="_blank" href="https://icons8.com/icon/JNzjznWAq3J5/search">Search</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>

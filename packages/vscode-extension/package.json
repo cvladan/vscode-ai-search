@@ -2,7 +2,7 @@
     "name": "ai-semantic-search",
     "displayName": "AI Search",
     "publisher": "jao",
-    "description": "Semantic search and indexing for VS Code / VSCodium using embeddings, vector search and re-ranking.",
+    "description": "Semantic search and indexing using embeddings, vector search and re-ranking.",
     "version": "0.2.4",
     "private": true,
     "engines": {
