@@ -1,5 +1,11 @@
 # AI Code Search
 
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/cvladan.ai-code-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=cvladan.ai-code-search)
+[![Open VSX](https://img.shields.io/open-vsx/v/cvladan/ai-code-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/cvladan/ai-code-search)
+
+- **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=cvladan.ai-code-search
+- **Open VSX (VSCodium):** https://open-vsx.org/extension/cvladan/ai-code-search
+
 Semantic code search for **VS Code / VSCodium**. Index your codebase into a vector
 database and search it by meaning instead of by keyword, right from the editor sidebar.
 
@@ -158,6 +164,51 @@ packages/vscode-extension  # the VS Code / VSCodium extension
 ```
 
 See [AGENTS.md](AGENTS.md) for architecture and contributor notes.
+
+## Publishing
+
+The extension goes to two marketplaces from the **same `.vsix`**:
+[VS Code Marketplace](https://marketplace.visualstudio.com/) (VS Code) and
+[Open VSX](https://open-vsx.org/) (VSCodium and other open editors).
+
+### Easiest: GitHub Actions (recommended)
+
+A workflow at [`.github/workflows/publish.yml`](.github/workflows/publish.yml) builds and
+publishes to **both** marketplaces automatically when you push a version tag.
+
+**One-time setup**
+
+1. **VS Code Marketplace** — create a publisher named `cvladan` at
+   <https://marketplace.visualstudio.com/manage>, then create an Azure DevOps **Personal
+   Access Token** (scope *Marketplace → Manage*).
+   Docs: <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
+2. **Open VSX** — sign in at <https://open-vsx.org> with GitHub, create an **Access Token**
+   (Settings → Access Tokens), then create your namespace once:
+   ```bash
+   npx ovsx create-namespace cvladan -p <OPEN_VSX_TOKEN>
+   ```
+3. **Add both tokens as repo secrets** (GitHub → Settings → Secrets and variables → Actions):
+   - `VSCE_PAT` = the Azure DevOps token
+   - `OVSX_PAT` = the Open VSX token
+
+**Each release** — just bump the version and push a tag:
+
+```bash
+npm version patch -w ai-code-search                       # bumps the extension version
+git commit -am "Release v0.1.1" && git tag v0.1.1
+git push && git push --tags                               # the workflow publishes to both
+```
+
+(You can also run it manually from the **Actions** tab via *Run workflow*.)
+
+### Manual alternative (no CI)
+
+```bash
+npm run package:vscode                                    # -> packages/vscode-extension/ai-code-search-<version>.vsix
+cd packages/vscode-extension
+npx @vscode/vsce publish -i ai-code-search-*.vsix -p <AZURE_DEVOPS_PAT>
+npx ovsx publish        ai-code-search-*.vsix -p <OPEN_VSX_TOKEN>
+```
 
 ## License
 

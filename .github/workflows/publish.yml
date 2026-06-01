@@ -1,0 +1,45 @@
+name: Publish Extension
+
+# Publishes the extension to the VS Code Marketplace and Open VSX.
+# Triggered by pushing a version tag (e.g. `git tag v0.1.1 && git push --tags`),
+# or manually from the Actions tab.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build core engine
+        run: npm run build:core
+
+      # Packages the .vsix once (runs the extension's webpack build via
+      # vscode:prepublish) and publishes it to Open VSX. The packaged file path
+      # is exported so the next step reuses the exact same artifact.
+      - name: Publish to Open VSX
+        id: openvsx
+        uses: HaaLeo/publish-vscode-extension@v2
+        with:
+          pat: ${{ secrets.OVSX_PAT }}
+          packagePath: packages/vscode-extension
+          dependencies: false
+
+      - name: Publish to VS Code Marketplace
+        uses: HaaLeo/publish-vscode-extension@v2
+        with:
+          pat: ${{ secrets.VSCE_PAT }}
+          registryUrl: https://marketplace.visualstudio.com
+          extensionFile: ${{ steps.openvsx.outputs.vsixPath }}
+          dependencies: false
