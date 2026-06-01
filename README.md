@@ -6,11 +6,11 @@
 - **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search
 - **Open VSX (VSCodium):** https://open-vsx.org/extension/jao/ai-semantic-search
 
-Semantic code search for **VS Code / VSCodium**. Index your codebase into a vector
-database and search it by meaning instead of by keyword, right from the editor sidebar.
-The pipeline is: an **embedding model** turns code into vectors → **vector search** finds
-candidates → and, optionally, a **re-ranking** model reorders those results for better
-relevance.
+Semantic search for **VS Code / VSCodium**. Index your codebase — or just a folder of
+Markdown/text files — into a vector database and search it by meaning instead of by
+keyword, right from the editor sidebar. The pipeline is: an **embedding model** turns your
+files into vectors → **vector search** finds candidates → and, optionally, a **re-ranking**
+model reorders those results for better relevance.
 
 > This project **started from** [zilliztech/claude-context](https://github.com/zilliztech/claude-context)
 > (the VS Code extension package). It is an independent project — not a fork — and it
