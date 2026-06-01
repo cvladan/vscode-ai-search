@@ -21,14 +21,14 @@ treat it as its own project. Notable changes from upstream:
 ## Layout
 
 ```
-packages/core               @ai-code-search/core — indexing engine (compiles to CommonJS)
+packages/core               @ai-search/core — indexing engine (compiles to CommonJS)
   src/embedding/            OpenAI(+OpenRouter), VoyageAI, Ollama, Gemini providers
   src/vectordb/             Milvus (gRPC + REST), Zilliz, LanceDB, Local (FAISS+SQLite)
   src/splitter/             ast-splitter, recursive-splitter (fallback), markdown-splitter
   src/reranker/             Reranker interface + OpenRouterReranker (Cohere-compatible /rerank)
   src/context.ts            Context — orchestrates indexing & search
   src/sync/                 Merkle-tree based incremental sync
-packages/vscode-extension   ai-code-search — the extension (bundled with webpack)
+packages/vscode-extension   ai-search — the extension (bundled with webpack)
   src/extension.ts          activate(); builds Context from settings
   src/config/configManager  reads/writes settings; provider & splitter registries
   src/webview/              sidebar UI (html/css/js + provider)
@@ -43,7 +43,7 @@ All from the repo root (npm workspaces):
 ```bash
 npm install                 # install everything (see "Dependency notes" below)
 npm run build               # build core, then bundle the extension
-npm run build:core          # tsc build of @ai-code-search/core
+npm run build:core          # tsc build of @ai-search/core
 npm run build:vscode        # webpack production bundle of the extension
 npm run typecheck           # tsc --noEmit on both packages
 npm run test:core           # jest tests in core
@@ -120,7 +120,7 @@ The UI triggers it from the **↑ Re-rank results** button (webview posts a `rer
 `executeForWebview(..., true)`); the button is shown only when `ConfigManager.isRerankerConfigured()`
 is true. To add a rerank provider, implement the `Reranker` interface in
 `packages/core/src/reranker/`, export it, and construct it in `ConfigManager.getReranker()`
-behind the `aiCodeSearch.reranker.*` settings.
+behind the `aiSearch.reranker.*` settings.
 
 **Add a vector backend:** implement `VectorDatabase` under `packages/core/src/vectordb/`,
 lazy-load any native deps (see `local-vectordb.ts`), export it, externalize the native

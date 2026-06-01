@@ -54,7 +54,7 @@ class AstCodeSplitterStub {
         this.loadedLanguages = new Map();
         // Import the recursive character splitter as fallback
         try {
-            const { RecursiveCharacterSplitter } = require('@ai-code-search/core');
+            const { RecursiveCharacterSplitter } = require('@ai-search/core');
             this.fallbackSplitter = new RecursiveCharacterSplitter(chunkSize, chunkOverlap);
         } catch (error) {
             console.error('Failed to initialize recursive fallback splitter:', error);
@@ -62,7 +62,7 @@ class AstCodeSplitterStub {
         }
         // Import the mdast-based Markdown splitter (used for .md/.markdown files)
         try {
-            const { MarkdownSplitter } = require('@ai-code-search/core');
+            const { MarkdownSplitter } = require('@ai-search/core');
             this.markdownSplitter = MarkdownSplitter ? new MarkdownSplitter(chunkSize, chunkOverlap) : null;
         } catch (error) {
             this.markdownSplitter = null;

@@ -8,15 +8,15 @@
     ],
     "scripts": {
         "build": "npm run build:core && npm run build:vscode",
-        "build:core": "npm run build -w @ai-code-search/core",
-        "build:vscode": "npm run webpack -w ai-code-search",
-        "compile:vscode": "npm run compile -w ai-code-search",
-        "dev:core": "npm run dev -w @ai-code-search/core",
-        "watch:vscode": "npm run watch -w ai-code-search",
-        "package:vscode": "npm run build:core && npm run webpack -w ai-code-search && npm run package -w ai-code-search",
-        "test:core": "npm run test -w @ai-code-search/core",
-        "typecheck": "npm run typecheck -w @ai-code-search/core && npm run typecheck -w ai-code-search",
-        "clean": "npm run clean -w @ai-code-search/core && npm run clean -w ai-code-search"
+        "build:core": "npm run build -w @ai-search/core",
+        "build:vscode": "npm run webpack -w ai-search",
+        "compile:vscode": "npm run compile -w ai-search",
+        "dev:core": "npm run dev -w @ai-search/core",
+        "watch:vscode": "npm run watch -w ai-search",
+        "package:vscode": "npm run build:core && npm run webpack -w ai-search && npm run package -w ai-search",
+        "test:core": "npm run test -w @ai-search/core",
+        "typecheck": "npm run typecheck -w @ai-search/core && npm run typecheck -w ai-search",
+        "clean": "npm run clean -w @ai-search/core && npm run clean -w ai-search"
     },
     "devDependencies": {
         "@types/node": "^20.0.0",

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Context, SearchQuery, SemanticSearchResult } from '@ai-code-search/core';
+import { Context, SearchQuery, SemanticSearchResult } from '@ai-search/core';
 import * as path from 'path';
 
 export class SearchCommand {

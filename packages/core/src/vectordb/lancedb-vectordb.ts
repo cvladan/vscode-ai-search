@@ -38,7 +38,7 @@ export class LanceDBVectorDatabase implements VectorDatabase {
   constructor(config: LanceDBConfig = {}) {
     this.config = config;
     const homeDir = require('os').homedir();
-    this.dataDir = config.dataDir || path.join(homeDir, '.ai-code-search', 'lancedb');
+    this.dataDir = config.dataDir || path.join(homeDir, '.ai-search', 'lancedb');
   }
 
   private async ensureConnection(): Promise<void> {

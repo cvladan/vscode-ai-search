@@ -18,17 +18,17 @@ and search it by meaning, from the editor sidebar.
 
 1. Open the **AI Code Search** view from the activity bar.
 2. Configure an **embedding provider** and a **vector database** (gear icon, or Settings →
-   search `aiCodeSearch`).
+   search `aiSearch`).
 3. **Index** your codebase, then search.
 
 ### Settings
 
-- `aiCodeSearch.embeddingProvider.provider` — `OpenAI` / `OpenRouter` / `VoyageAI` / `Ollama` / `Gemini`
-- `aiCodeSearch.embeddingProvider.model`, `.apiKey`, `.baseURL`, `.host` (Ollama)
-- `aiCodeSearch.vectorDatabase.provider` — `Milvus` / `LanceDB` / `Local`
-- `aiCodeSearch.vectorDatabase.dataDir` — folder for local DBs (default `~/.ai-code-search`)
-- `aiCodeSearch.milvus.address`, `.token`
-- `aiCodeSearch.splitter.type` — `ast` (default) or `recursive`; `.chunkSize`, `.chunkOverlap`
+- `aiSearch.embeddingProvider.provider` — `OpenAI` / `OpenRouter` / `VoyageAI` / `Ollama` / `Gemini`
+- `aiSearch.embeddingProvider.model`, `.apiKey`, `.baseURL`, `.host` (Ollama)
+- `aiSearch.vectorDatabase.provider` — `Milvus` / `LanceDB` / `Local`
+- `aiSearch.vectorDatabase.dataDir` — folder for local DBs (default `~/.ai-search`)
+- `aiSearch.milvus.address`, `.token`
+- `aiSearch.splitter.type` — `ast` (default) or `recursive`; `.chunkSize`, `.chunkOverlap`
 
 > LanceDB / Local backends use native modules and work best when running from source.
 > The **Milvus (REST)** backend needs no native modules.

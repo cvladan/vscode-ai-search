@@ -21,10 +21,10 @@
         "incremental": true,
         "tsBuildInfoFile": ".tsbuildinfo",
         "paths": {
-            "@ai-code-search/core": [
+            "@ai-search/core": [
                 "./packages/core/src"
             ],
-            "@ai-code-search/core/*": [
+            "@ai-search/core/*": [
                 "./packages/core/src/*"
             ]
         }

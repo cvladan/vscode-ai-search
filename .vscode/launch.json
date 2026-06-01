@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run AI Code Search Extension",
+            "name": "Run AI Search Extension",
             "type": "extensionHost",
             "request": "launch",
             "args": [

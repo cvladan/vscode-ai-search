@@ -56,7 +56,7 @@ export class LocalVectorDatabase implements VectorDatabase {
     constructor(config: LocalVectorDatabaseConfig = {}) {
         this.config = config;
         const homeDir = require('os').homedir();
-        this.dataDir = config.dataDir || path.join(homeDir, '.ai-code-search', 'local-db');
+        this.dataDir = config.dataDir || path.join(homeDir, '.ai-search', 'local-db');
         
         // Ensure data directory exists
         if (!fs.existsSync(this.dataDir)) {

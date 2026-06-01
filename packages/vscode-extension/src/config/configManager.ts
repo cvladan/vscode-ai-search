@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { OpenAIEmbedding, OpenAIEmbeddingConfig, VoyageAIEmbedding, VoyageAIEmbeddingConfig, OllamaEmbedding, OllamaEmbeddingConfig, GeminiEmbedding, GeminiEmbeddingConfig, MilvusConfig, SplitterType, SplitterConfig, AstCodeSplitter, RecursiveCharacterSplitter, OpenRouterReranker, Reranker } from '@ai-code-search/core';
+import { OpenAIEmbedding, OpenAIEmbeddingConfig, VoyageAIEmbedding, VoyageAIEmbeddingConfig, OllamaEmbedding, OllamaEmbeddingConfig, GeminiEmbedding, GeminiEmbeddingConfig, MilvusConfig, SplitterType, SplitterConfig, AstCodeSplitter, RecursiveCharacterSplitter, OpenRouterReranker, Reranker } from '@ai-search/core';
 
 // Simplified Milvus configuration interface for frontend
 export interface MilvusWebConfig {
@@ -161,7 +161,7 @@ const SPLITTER_PROVIDERS = {
 } as const;
 
 export class ConfigManager {
-    private static readonly CONFIG_KEY = 'aiCodeSearch';
+    private static readonly CONFIG_KEY = 'aiSearch';
     private context: vscode.ExtensionContext;
 
     constructor(context: vscode.ExtensionContext) {
@@ -381,7 +381,7 @@ export class ConfigManager {
 
     /**
      * Get the storage directory for local vector databases (LanceDB / Local).
-     * Returns undefined to let the backend pick its default (~/.ai-code-search).
+     * Returns undefined to let the backend pick its default (~/.ai-search).
      */
     getVectorDatabaseDataDir(): string | undefined {
         const config = vscode.workspace.getConfiguration(ConfigManager.CONFIG_KEY);

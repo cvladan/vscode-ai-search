@@ -5,8 +5,8 @@ import { SearchCommand } from './commands/searchCommand';
 import { IndexCommand } from './commands/indexCommand';
 import { SyncCommand } from './commands/syncCommand';
 import { ConfigManager } from './config/configManager';
-import { Context, OpenAIEmbedding, VoyageAIEmbedding, GeminiEmbedding, MilvusRestfulVectorDatabase, LanceDBVectorDatabase, LocalVectorDatabase, AstCodeSplitter, RecursiveCharacterSplitter, SplitterType } from '@ai-code-search/core';
-import { envManager } from '@ai-code-search/core';
+import { Context, OpenAIEmbedding, VoyageAIEmbedding, GeminiEmbedding, MilvusRestfulVectorDatabase, LanceDBVectorDatabase, LocalVectorDatabase, AstCodeSplitter, RecursiveCharacterSplitter, SplitterType } from '@ai-search/core';
+import { envManager } from '@ai-search/core';
 
 /**
  * Build the configured vector database backend. LanceDB and Local run fully on
@@ -71,27 +71,27 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // Listen for configuration changes
         vscode.workspace.onDidChangeConfiguration((event) => {
-            if (event.affectsConfiguration('aiCodeSearch.embeddingProvider') ||
-                event.affectsConfiguration('aiCodeSearch.vectorDatabase') ||
-                event.affectsConfiguration('aiCodeSearch.reranker') ||
-                event.affectsConfiguration('aiCodeSearch.milvus') ||
-                event.affectsConfiguration('aiCodeSearch.splitter') ||
-                event.affectsConfiguration('aiCodeSearch.autoSync')) {
+            if (event.affectsConfiguration('aiSearch.embeddingProvider') ||
+                event.affectsConfiguration('aiSearch.vectorDatabase') ||
+                event.affectsConfiguration('aiSearch.reranker') ||
+                event.affectsConfiguration('aiSearch.milvus') ||
+                event.affectsConfiguration('aiSearch.splitter') ||
+                event.affectsConfiguration('aiSearch.autoSync')) {
                 console.log('Context configuration changed, reloading...');
                 reloadContextConfiguration();
             }
         }),
 
         // Register commands
-        vscode.commands.registerCommand('aiCodeSearch.semanticSearch', () => {
+        vscode.commands.registerCommand('aiSearch.semanticSearch', () => {
             // Get selected text from active editor
             const editor = vscode.window.activeTextEditor;
             const selectedText = editor?.document.getText(editor.selection);
             return searchCommand.execute(selectedText);
         }),
-        vscode.commands.registerCommand('aiCodeSearch.indexCodebase', () => indexCommand.execute()),
-        vscode.commands.registerCommand('aiCodeSearch.clearIndex', () => indexCommand.clearIndex()),
-        vscode.commands.registerCommand('aiCodeSearch.reloadConfiguration', () => reloadContextConfiguration())
+        vscode.commands.registerCommand('aiSearch.indexCodebase', () => indexCommand.execute()),
+        vscode.commands.registerCommand('aiSearch.clearIndex', () => indexCommand.clearIndex()),
+        vscode.commands.registerCommand('aiSearch.reloadConfiguration', () => reloadContextConfiguration())
     ];
 
     context.subscriptions.push(...disposables);
@@ -106,7 +106,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = `$(search) Context`;
     statusBarItem.tooltip = 'Click to open semantic search';
-    statusBarItem.command = 'aiCodeSearch.semanticSearch';
+    statusBarItem.command = 'aiSearch.semanticSearch';
     statusBarItem.show();
 
     context.subscriptions.push(statusBarItem);
@@ -124,7 +124,7 @@ async function runInitialSync() {
 }
 
 function setupAutoSync() {
-    const config = vscode.workspace.getConfiguration('aiCodeSearch');
+    const config = vscode.workspace.getConfiguration('aiSearch');
     const autoSyncEnabled = config.get<boolean>('autoSync.enabled', true);
     const autoSyncInterval = config.get<number>('autoSync.intervalMinutes', 5);
 

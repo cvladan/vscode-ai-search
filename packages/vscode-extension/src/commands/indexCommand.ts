@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Context } from '@ai-code-search/core';
+import { Context } from '@ai-search/core';
 import * as path from 'path';
 
 export class IndexCommand {
@@ -74,7 +74,7 @@ export class IndexCommand {
 
                 // Initialize file synchronizer
                 progress.report({ increment: 0, message: 'Initializing file synchronizer...' });
-                const { FileSynchronizer } = await import("@ai-code-search/core");
+                const { FileSynchronizer } = await import("@ai-search/core");
                 const synchronizer = new FileSynchronizer(
                     selectedFolder.uri.fsPath,
                     this.context.getIgnorePatterns() || [],

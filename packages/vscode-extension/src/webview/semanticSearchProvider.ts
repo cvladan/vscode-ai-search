@@ -272,7 +272,7 @@ export class SemanticSearchViewProvider implements vscode.WebviewViewProvider {
             await new Promise(resolve => setTimeout(resolve, 100));
 
             // Notify extension to recreate Context with new config
-            vscode.commands.executeCommand('aiCodeSearch.reloadConfiguration');
+            vscode.commands.executeCommand('aiSearch.reloadConfiguration');
 
             webview.postMessage({
                 command: 'saveResult',

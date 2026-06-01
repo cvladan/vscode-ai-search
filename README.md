@@ -1,10 +1,10 @@
-# AI Code Search
+# AI Search
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/svko.ai-code-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=svko.ai-code-search)
-[![Open VSX](https://img.shields.io/open-vsx/v/svko/ai-code-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/svko/ai-code-search)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/svko.ai-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=svko.ai-search)
+[![Open VSX](https://img.shields.io/open-vsx/v/svko/ai-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/svko/ai-search)
 
-- **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=svko.ai-code-search
-- **Open VSX (VSCodium):** https://open-vsx.org/extension/svko/ai-code-search
+- **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=svko.ai-search
+- **Open VSX (VSCodium):** https://open-vsx.org/extension/svko/ai-search
 
 Semantic code search for **VS Code / VSCodium**. Index your codebase into a vector
 database and search it by meaning instead of by keyword, right from the editor sidebar.
@@ -38,35 +38,35 @@ Then either **debug it** or **install the packaged extension**:
 ### A) Debug in an Extension Development Host (recommended while developing)
 
 1. Open this folder in VSCodium.
-2. Press **F5** (runs the `Run AI Code Search Extension` launch config).
+2. Press **F5** (runs the `Run AI Search Extension` launch config).
    It builds the extension and opens a second VSCodium window with it loaded.
-3. In that window, open any project, then open the **AI Code Search** view from the activity bar.
+3. In that window, open any project, then open the **AI Search** view from the activity bar.
 
 ### B) Install the packaged `.vsix`
 
 ```bash
-npm run package:vscode      # produces packages/vscode-extension/ai-code-search-<version>.vsix
-codium --install-extension packages/vscode-extension/ai-code-search-*.vsix
+npm run package:vscode      # produces packages/vscode-extension/ai-search-<version>.vsix
+codium --install-extension packages/vscode-extension/ai-search-*.vsix
 ```
 
 (or in VSCodium: **Extensions → … → Install from VSIX…**)
 
 ## Configure it
 
-Open **Settings** and search for `aiCodeSearch`, or use the gear icon in the sidebar view.
+Open **Settings** and search for `aiSearch`, or use the gear icon in the sidebar view.
 
-1. **Embedding provider** (`aiCodeSearch.embeddingProvider.provider`):
+1. **Embedding provider** (`aiSearch.embeddingProvider.provider`):
    `OpenAI` · `OpenRouter` · `VoyageAI` · `Ollama` · `Gemini`. Set the model and API key.
    For a fully local setup pick **Ollama** (e.g. model `nomic-embed-text`).
-2. **Vector database** (`aiCodeSearch.vectorDatabase.provider`):
+2. **Vector database** (`aiSearch.vectorDatabase.provider`):
    - `Milvus` — default, talks to Milvus / Zilliz Cloud over REST (no native modules).
-   - `LanceDB` — embedded local database, stored under `~/.ai-code-search/lancedb`.
-   - `Local` — local FAISS + SQLite, stored under `~/.ai-code-search/local-db`.
+   - `LanceDB` — embedded local database, stored under `~/.ai-search/lancedb`.
+   - `Local` — local FAISS + SQLite, stored under `~/.ai-search/local-db`.
 
    > LanceDB and Local use native modules. They work out of the box when you run from
    > source (F5). In a `.vsix` installed without dependencies they may be unavailable —
    > use **Milvus** (REST) for the zero-native-dependency path. See [AGENTS.md](AGENTS.md).
-3. **Index** your codebase from the sidebar (or the `AI Code Search: Index Codebase` command), then search.
+3. **Index** your codebase from the sidebar (or the `AI Search: Index Codebase` command), then search.
 
 ## Which files get indexed
 
@@ -96,7 +96,7 @@ there if you want a different set.
 ## Splitter: AST vs. fallback (and where Markdown fits)
 
 How a file is cut into chunks before embedding matters a lot for search quality.
-Two strategies are available (`aiCodeSearch.splitter.type`, default `ast`):
+Two strategies are available (`aiSearch.splitter.type`, default `ast`):
 
 | | **AST splitter** (`ast`) | **Recursive splitter** (`recursive`) |
 |---|---|---|
@@ -135,13 +135,13 @@ rerank models (currently free on OpenRouter):
 | `cohere/rerank-4-pro` | highest accuracy, 32K context |
 | `cohere/rerank-v3.5` | multilingual / semi-structured, 4K context |
 
-Enable it in Settings (`aiCodeSearch.reranker.*`):
+Enable it in Settings (`aiSearch.reranker.*`):
 
 ```json
 {
-  "aiCodeSearch.reranker.enabled": true,
-  "aiCodeSearch.reranker.model": "cohere/rerank-4-fast",
-  "aiCodeSearch.reranker.apiKey": "sk-or-..."
+  "aiSearch.reranker.enabled": true,
+  "aiSearch.reranker.model": "cohere/rerank-4-fast",
+  "aiSearch.reranker.apiKey": "sk-or-..."
 }
 ```
 
@@ -206,10 +206,10 @@ scripts/release.sh patch        # or: minor | major
 ### Manual alternative (no CI)
 
 ```bash
-npm run package:vscode                                    # -> packages/vscode-extension/ai-code-search-<version>.vsix
+npm run package:vscode                                    # -> packages/vscode-extension/ai-search-<version>.vsix
 cd packages/vscode-extension
-npx @vscode/vsce publish -i ai-code-search-*.vsix -p <AZURE_DEVOPS_PAT>
-npx ovsx publish        ai-code-search-*.vsix -p <OPEN_VSX_TOKEN>
+npx @vscode/vsce publish -i ai-search-*.vsix -p <AZURE_DEVOPS_PAT>
+npx ovsx publish        ai-search-*.vsix -p <OPEN_VSX_TOKEN>
 ```
 
 ## License

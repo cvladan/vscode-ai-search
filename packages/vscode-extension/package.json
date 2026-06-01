@@ -1,6 +1,6 @@
 {
-    "name": "ai-code-search",
-    "displayName": "AI Code Search",
+    "name": "ai-search",
+    "displayName": "AI Search",
     "publisher": "svko",
     "description": "Semantic code search and indexing for VS Code / VSCodium. Started from zilliztech/claude-context.",
     "version": "0.1.1",
@@ -30,25 +30,25 @@
     "contributes": {
         "commands": [
             {
-                "command": "aiCodeSearch.semanticSearch",
+                "command": "aiSearch.semanticSearch",
                 "title": "Semantic Search",
-                "category": "AI Code Search"
+                "category": "AI Search"
             },
             {
-                "command": "aiCodeSearch.indexCodebase",
+                "command": "aiSearch.indexCodebase",
                 "title": "Index Codebase",
-                "category": "AI Code Search"
+                "category": "AI Search"
             },
             {
-                "command": "aiCodeSearch.clearIndex",
+                "command": "aiSearch.clearIndex",
                 "title": "Clear Index",
-                "category": "AI Code Search"
+                "category": "AI Search"
             }
         ],
         "menus": {
             "editor/context": [
                 {
-                    "command": "aiCodeSearch.semanticSearch",
+                    "command": "aiSearch.semanticSearch",
                     "when": "editorHasSelection",
                     "group": "navigation@100"
                 }
@@ -57,25 +57,25 @@
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "aiCodeSearchSidebar",
-                    "title": "AI Code Search",
+                    "id": "aiSearchSidebar",
+                    "title": "AI Search",
                     "icon": "./resources/activity_bar.svg"
                 }
             ]
         },
         "views": {
-            "aiCodeSearchSidebar": [
+            "aiSearchSidebar": [
                 {
                     "id": "semanticSearchView",
-                    "name": "AI Code Search",
+                    "name": "AI Search",
                     "type": "webview"
                 }
             ]
         },
         "configuration": {
-            "title": "AI Code Search",
+            "title": "AI Search",
             "properties": {
-                "aiCodeSearch.embeddingProvider.provider": {
+                "aiSearch.embeddingProvider.provider": {
                     "type": "string",
                     "enum": [
                         "OpenAI",
@@ -87,31 +87,31 @@
                     "default": "OpenAI",
                     "description": "Embedding service provider"
                 },
-                "aiCodeSearch.embeddingProvider.model": {
+                "aiSearch.embeddingProvider.model": {
                     "type": "string",
                     "description": "Embedding model to use"
                 },
-                "aiCodeSearch.embeddingProvider.apiKey": {
+                "aiSearch.embeddingProvider.apiKey": {
                     "type": "string",
                     "description": "API key for the embedding provider"
                 },
-                "aiCodeSearch.embeddingProvider.baseURL": {
+                "aiSearch.embeddingProvider.baseURL": {
                     "type": "string",
                     "description": "Custom API endpoint URL (optional)"
                 },
-                "aiCodeSearch.embeddingProvider.host": {
+                "aiSearch.embeddingProvider.host": {
                     "type": "string",
                     "description": "Ollama server host URL (optional)"
                 },
-                "aiCodeSearch.embeddingProvider.keepAlive": {
+                "aiSearch.embeddingProvider.keepAlive": {
                     "type": "string",
                     "description": "Keep model alive duration for Ollama (optional)"
                 },
-                "aiCodeSearch.embeddingProvider.outputDimensionality": {
+                "aiSearch.embeddingProvider.outputDimensionality": {
                     "type": "number",
                     "description": "Output dimension for Gemini embedding (supports Matryoshka representation: 3072, 1536, 768, 256)"
                 },
-                "aiCodeSearch.vectorDatabase.provider": {
+                "aiSearch.vectorDatabase.provider": {
                     "type": "string",
                     "enum": [
                         "Milvus",
@@ -126,16 +126,16 @@
                     "default": "Milvus",
                     "description": "Vector database backend. LanceDB and Local run fully on your machine and need no server."
                 },
-                "aiCodeSearch.vectorDatabase.dataDir": {
+                "aiSearch.vectorDatabase.dataDir": {
                     "type": "string",
-                    "description": "Storage directory for the local vector database (LanceDB/Local). Defaults to ~/.ai-code-search."
+                    "description": "Storage directory for the local vector database (LanceDB/Local). Defaults to ~/.ai-search."
                 },
-                "aiCodeSearch.reranker.enabled": {
+                "aiSearch.reranker.enabled": {
                     "type": "boolean",
                     "default": false,
                     "description": "Re-rank vector search results with a dedicated rerank model for better relevance (second-stage retrieval)."
                 },
-                "aiCodeSearch.reranker.provider": {
+                "aiSearch.reranker.provider": {
                     "type": "string",
                     "enum": [
                         "OpenRouter"
@@ -143,7 +143,7 @@
                     "default": "OpenRouter",
                     "description": "Rerank provider. OpenRouter exposes Cohere rerank models via POST /api/v1/rerank."
                 },
-                "aiCodeSearch.reranker.model": {
+                "aiSearch.reranker.model": {
                     "type": "string",
                     "enum": [
                         "cohere/rerank-4-fast",
@@ -158,35 +158,35 @@
                     "default": "cohere/rerank-4-fast",
                     "description": "Rerank model id (you may also type a custom Cohere-compatible model)."
                 },
-                "aiCodeSearch.reranker.apiKey": {
+                "aiSearch.reranker.apiKey": {
                     "type": "string",
                     "description": "API key for the rerank provider. If empty and the embedding provider is OpenRouter, that key is reused."
                 },
-                "aiCodeSearch.reranker.baseURL": {
+                "aiSearch.reranker.baseURL": {
                     "type": "string",
                     "description": "Custom rerank endpoint base URL (optional). Defaults to https://openrouter.ai/api/v1."
                 },
-                "aiCodeSearch.milvus.address": {
+                "aiSearch.milvus.address": {
                     "type": "string",
                     "description": "Milvus server address (e.g., http://localhost:19530)"
                 },
-                "aiCodeSearch.milvus.token": {
+                "aiSearch.milvus.token": {
                     "type": "string",
                     "description": "Milvus authentication token (optional)"
                 },
-                "aiCodeSearch.autoSync.enabled": {
+                "aiSearch.autoSync.enabled": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable automatic synchronization of workspace index every 5 minutes"
                 },
-                "aiCodeSearch.autoSync.intervalMinutes": {
+                "aiSearch.autoSync.intervalMinutes": {
                     "type": "number",
                     "default": 5,
                     "minimum": 1,
                     "maximum": 60,
                     "description": "Auto-sync interval in minutes (1-60). This runs periodic sync to keep the index updated."
                 },
-                "aiCodeSearch.splitter.type": {
+                "aiSearch.splitter.type": {
                     "type": "string",
                     "enum": [
                         "langchain",
@@ -199,14 +199,14 @@
                     "default": "ast",
                     "description": "Code splitter type to use for breaking down code into chunks"
                 },
-                "aiCodeSearch.splitter.chunkSize": {
+                "aiSearch.splitter.chunkSize": {
                     "type": "number",
                     "default": 1000,
                     "minimum": 100,
                     "maximum": 5000,
                     "description": "Maximum size of each code chunk in characters"
                 },
-                "aiCodeSearch.splitter.chunkOverlap": {
+                "aiSearch.splitter.chunkOverlap": {
                     "type": "number",
                     "default": 200,
                     "minimum": 0,
@@ -230,7 +230,7 @@
         "release": "vsce publish --no-dependencies"
     },
     "dependencies": {
-        "@ai-code-search/core": "*",
+        "@ai-search/core": "*",
         "web-tree-sitter": "^0.25.6"
     },
     "devDependencies": {

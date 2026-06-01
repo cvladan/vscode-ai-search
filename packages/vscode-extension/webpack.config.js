@@ -40,10 +40,10 @@ module.exports = {
         // support reading TypeScript and JavaScript files
         extensions: ['.ts', '.js'],
         alias: {
-            '@ai-code-search/core': path.resolve(__dirname, '../core/dist/index.js'),
-            '@ai-code-search/core/dist/splitter': path.resolve(__dirname, '../core/dist/splitter'),
-            '@ai-code-search/core/dist/embedding': path.resolve(__dirname, '../core/dist/embedding'),
-            '@ai-code-search/core/dist/vectordb': path.resolve(__dirname, '../core/dist/vectordb')
+            '@ai-search/core': path.resolve(__dirname, '../core/dist/index.js'),
+            '@ai-search/core/dist/splitter': path.resolve(__dirname, '../core/dist/splitter'),
+            '@ai-search/core/dist/embedding': path.resolve(__dirname, '../core/dist/embedding'),
+            '@ai-search/core/dist/vectordb': path.resolve(__dirname, '../core/dist/vectordb')
         }
     },
     module: {

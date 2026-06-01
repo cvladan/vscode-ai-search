@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Context } from '@ai-code-search/core';
+import { Context } from '@ai-search/core';
 import * as fs from 'fs';
 
 export class SyncCommand {
