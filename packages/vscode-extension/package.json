@@ -3,7 +3,7 @@
     "displayName": "AI Search",
     "publisher": "jao",
     "description": "Semantic code search and indexing for VS Code / VSCodium. Started from zilliztech/claude-context.",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "private": true,
     "engines": {
         "vscode": "^1.74.0"
