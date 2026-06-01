@@ -6,21 +6,21 @@
 - **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=jao.ai-semantic-search
 - **Open VSX (VSCodium):** https://open-vsx.org/extension/jao/ai-semantic-search
 
-Semantic search for **VS Code / VSCodium**. Index your codebase (or just a folder of
-Markdown/text files) into a vector database and search it by meaning instead of by
+Semantic search for **VS Code / VSCodium**. Index your codebase, or just a folder of
+Markdown/text files, into a vector database and search it by meaning instead of by
 keyword, right from the editor sidebar. The pipeline is: an **embedding model** turns your
 files into vectors → **vector search** finds candidates → and, optionally, a **re-ranking**
 model reorders those results for better relevance.
 
-> This project **started from** [zilliztech/claude-context](https://github.com/zilliztech/claude-context)
-> (the VS Code extension package). It is an independent project, not a fork, and it
+> This project **started from** [zilliztech/claude-context](https://github.com/zilliztech/claude-context),
+> specifically its VS Code extension package. It is an independent project, not a fork, and it
 > incorporates several community improvements. See [AGENTS.md](AGENTS.md) for details.
 
 ## Features
 
 - 🔍 **Semantic search** over your whole codebase, from the activity-bar sidebar.
 - 🌳 **AST-aware chunking** for js/ts, python, java, c/c++, go, rust, c#, scala, **php**, **ruby**.
-- 📝 **Markdown-aware chunking** using a real Markdown AST (split by headings and `---`).
+- 📝 **Markdown-aware chunking** using a real Markdown AST, splitting by headings and `---`.
 - 🔌 **Embedding providers**: OpenAI, **OpenRouter**, VoyageAI, Ollama (local), Gemini.
 - 💾 **Vector databases**: Milvus / Zilliz Cloud (default, REST), **LanceDB** (local), **Local FAISS+SQLite** (local).
 
@@ -60,22 +60,22 @@ Open **Settings** and search for `aiSearch`, or use the gear icon in the sidebar
 
 1. **Embedding provider** (`aiSearch.embeddingProvider.provider`):
    `OpenAI` · `OpenRouter` · `VoyageAI` · `Ollama` · `Gemini`. Set the model and API key.
-   For a fully local setup pick **Ollama** (e.g. model `nomic-embed-text`).
+   For a fully local setup pick **Ollama**, for example the model `nomic-embed-text`.
 2. **Vector database** (`aiSearch.vectorDatabase.provider`):
-   - `Milvus`: default, talks to Milvus / Zilliz Cloud over REST (no native modules).
+   - `Milvus`: default, talks to Milvus / Zilliz Cloud over REST, no native modules needed.
    - `LanceDB`: embedded local database, stored under `~/.ai-search/lancedb`.
    - `Local`: local FAISS + SQLite, stored under `~/.ai-search/local-db`.
 
    > LanceDB and Local use native modules. They work out of the box when you run from
-   > source (F5). In a `.vsix` installed without dependencies they may be unavailable;
-   > use **Milvus** (REST) for the zero-native-dependency path. See [AGENTS.md](AGENTS.md).
-3. **Index** your codebase from the sidebar (or the `AI Search: Index Codebase` command), then search.
+   > source with F5. In a `.vsix` installed without dependencies they may be unavailable;
+   > use the **Milvus** REST backend for the zero-native-dependency path. See [AGENTS.md](AGENTS.md).
+3. **Index** your codebase from the sidebar, or with the `AI Search: Index Codebase` command, then search.
 
 ## Which files get indexed
 
 Indexing uses a strict **allowlist** of file extensions. The extension is checked
-*before* a file is ever read, so binary files (video, images, audio, PDFs, archives,
-executables, …) are **never opened and never sent to the embedding model**. No wasted
+*before* a file is ever read, so binary files such as video, images, audio, PDFs, archives and
+executables are **never opened and never sent to the embedding model**. No wasted
 embedding calls on a `.mp4`.
 
 By default these extensions are indexed:
@@ -85,12 +85,12 @@ By default these extensions are indexed:
 | Programming | `.ts` `.tsx` `.js` `.jsx` `.py` `.java` `.cpp` `.c` `.h` `.hpp` `.cs` `.go` `.rs` `.php` `.rb` `.swift` `.kt` `.scala` `.m` `.mm` `.dart` `.sol` |
 | Text / markup | `.md` `.markdown` `.txt` `.ipynb` |
 
-Everything else is skipped, **including files with no extension** (`Makefile`, `LICENSE`,
-dotfiles, …). `.txt` files are indexed and processed **exactly like Markdown** (same
-mdast splitter). Note that some other plain-text formats (`.json`, `.yaml`,
-`.html`, `.css`, `.sql`, `.sh`, …) are **not** indexed by default. On top of the
+Everything else is skipped, **including files with no extension** such as `Makefile`, `LICENSE` and
+dotfiles. `.txt` files are indexed and processed **exactly like Markdown**, with the same
+mdast splitter. Note that some other plain-text formats such as `.json`, `.yaml`,
+`.html`, `.css`, `.sql` and `.sh` are **not** indexed by default. On top of the
 allowlist, common noise is ignored regardless of extension: `node_modules/`, `dist/`,
-`build/`, `out/`, `.git/`, caches, logs, and minified/bundled files (`*.min.js`, etc.).
+`build/`, `out/`, `.git/`, caches, logs, and minified or bundled files like `*.min.js`.
 
 The list lives in `DEFAULT_SUPPORTED_EXTENSIONS` in
 [`packages/core/src/context.ts`](packages/core/src/context.ts). Add or remove extensions
@@ -115,8 +115,8 @@ splitter is still used automatically as a safety net:
 - a single AST node is larger than `chunkSize` → the recursive splitter sub-divides it.
 
 **Markdown** is handled separately by a dedicated splitter built on a real Markdown AST
-(`remark`/mdast): it splits by heading boundaries and thematic breaks (`---`), and records
-the heading path (e.g. `Title > Section`) in each chunk's metadata. If `remark` can't be
+using `remark`/mdast: it splits by heading boundaries and thematic breaks like `---`, and records
+the heading path, for example `Title > Section`, in each chunk's metadata. If `remark` can't be
 loaded it falls back to the recursive splitter too.
 
 > The original project used LangChain for the fallback. This project replaced it with a
@@ -129,8 +129,8 @@ A **reranker** is a second stage: after the vector DB returns a pool of candidat
 dedicated rerank model re-scores `(query, document)` pairs and reorders them. It noticeably
 improves the top results.
 
-This uses **OpenRouter's rerank endpoint** (`POST /api/v1/rerank`), which exposes Cohere's
-rerank models (currently free on OpenRouter):
+This uses **OpenRouter's rerank endpoint** `POST /api/v1/rerank`, which exposes Cohere's
+rerank models, currently free on OpenRouter:
 
 | Model | Notes |
 |---|---|
@@ -153,7 +153,7 @@ Enable it in Settings (`aiSearch.reranker.*`):
   every search fast and only spends rerank calls when you ask for them.
 - If `reranker.apiKey` is empty **and** your embedding provider is already OpenRouter, that
   key is reused automatically, so no extra credentials are needed.
-- `reranker.baseURL` is optional (defaults to `https://openrouter.ai/api/v1`); since the
+- `reranker.baseURL` is optional and defaults to `https://openrouter.ai/api/v1`; since the
   request/response is Cohere-compatible, you can point it at Cohere/Jina/Voyage instead.
 - On click, the extension fetches a larger candidate pool from the vector DB, reranks it,
   and shows the reordered top results. **If reranking fails for any reason, search silently
@@ -171,8 +171,8 @@ See [AGENTS.md](AGENTS.md) for architecture and contributor notes.
 ## Publishing
 
 The extension goes to two marketplaces from the **same `.vsix`**:
-[VS Code Marketplace](https://marketplace.visualstudio.com/) (VS Code) and
-[Open VSX](https://open-vsx.org/) (VSCodium and other open editors).
+the [VS Code Marketplace](https://marketplace.visualstudio.com/) for VS Code, and
+[Open VSX](https://open-vsx.org/) for VSCodium and other open editors.
 
 ### Easiest: GitHub Actions (recommended)
 
@@ -183,7 +183,7 @@ publishes to **both** marketplaces automatically when you push a version tag.
 
 1. **VS Code Marketplace**: create a publisher named `jao` at
    <https://marketplace.visualstudio.com/manage>, then create an Azure DevOps **Personal
-   Access Token** (scope *Marketplace → Manage*).
+   Access Token** with the scope *Marketplace → Manage*.
    Docs: <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
 2. **Open VSX**: sign in at <https://open-vsx.org> with GitHub, create an **Access Token**
    (Settings → Access Tokens), then create your namespace once:
@@ -204,7 +204,7 @@ Equivalent from the terminal:
 scripts/release.sh patch        # or: minor | major
 ```
 
-(You can also trigger the workflow manually from the **Actions** tab via *Run workflow*.)
+You can also trigger the workflow manually from the **Actions** tab via *Run workflow*.
 
 ### Manual alternative (no CI)
 
