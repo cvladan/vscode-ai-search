@@ -1,7 +1,7 @@
 {
     "name": "ai-search",
     "displayName": "AI Search",
-    "publisher": "svko",
+    "publisher": "jao",
     "description": "Semantic code search and indexing for VS Code / VSCodium. Started from zilliztech/claude-context.",
     "version": "0.1.1",
     "private": true,

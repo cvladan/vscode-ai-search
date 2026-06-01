@@ -1,10 +1,10 @@
 # AI Search
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/svko.ai-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=svko.ai-search)
-[![Open VSX](https://img.shields.io/open-vsx/v/svko/ai-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/svko/ai-search)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/jao.ai-search?label=VS%20Code%20Marketplace&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=jao.ai-search)
+[![Open VSX](https://img.shields.io/open-vsx/v/jao/ai-search?label=Open%20VSX&logo=eclipseide)](https://open-vsx.org/extension/jao/ai-search)
 
-- **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=svko.ai-search
-- **Open VSX (VSCodium):** https://open-vsx.org/extension/svko/ai-search
+- **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=jao.ai-search
+- **Open VSX (VSCodium):** https://open-vsx.org/extension/jao/ai-search
 
 Semantic code search for **VS Code / VSCodium**. Index your codebase into a vector
 database and search it by meaning instead of by keyword, right from the editor sidebar.
@@ -178,14 +178,14 @@ publishes to **both** marketplaces automatically when you push a version tag.
 
 **One-time setup**
 
-1. **VS Code Marketplace** — create a publisher named `svko` at
+1. **VS Code Marketplace** — create a publisher named `jao` at
    <https://marketplace.visualstudio.com/manage>, then create an Azure DevOps **Personal
    Access Token** (scope *Marketplace → Manage*).
    Docs: <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
 2. **Open VSX** — sign in at <https://open-vsx.org> with GitHub, create an **Access Token**
    (Settings → Access Tokens), then create your namespace once:
    ```bash
-   npx ovsx create-namespace svko -p <OPEN_VSX_TOKEN>
+   npx ovsx create-namespace jao -p <OPEN_VSX_TOKEN>
    ```
 3. **Add both tokens as repo secrets** (GitHub → Settings → Secrets and variables → Actions):
    - `VSCE_PAT` = the Azure DevOps token
