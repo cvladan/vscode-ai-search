@@ -8,9 +8,9 @@
 set -euo pipefail
 
 RELEASE_TYPE="${1:-patch}"
-case "$RELEASE_TYPE" in
+case "${RELEASE_TYPE}" in
   major|minor|patch) ;;
-  *) echo "❌ Usage: release.sh [patch|minor|major]"; exit 1 ;;
+  *) echo "[release] Usage: release.sh [patch|minor|major]"; exit 1 ;;
 esac
 
 # Run from the repo root regardless of where the task invokes us.
@@ -18,24 +18,24 @@ cd "$(dirname "$0")/.."
 
 # Refuse to release with uncommitted changes (so the release commit is clean).
 if [ -n "$(git status --porcelain)" ]; then
-  echo "❌ Working tree is not clean. Commit or stash your changes first."
+  echo "[release] Working tree is not clean. Commit or stash your changes first."
   git status --short
   exit 1
 fi
 
-echo "⬆️  Bumping $RELEASE_TYPE version of the extension…"
-npm version "$RELEASE_TYPE" --no-git-tag-version -w ai-code-search >/dev/null
+echo "[release] Bumping ${RELEASE_TYPE} version of the extension..."
+npm version "${RELEASE_TYPE}" --no-git-tag-version -w ai-code-search >/dev/null
 
 VERSION="$(node -p "require('./packages/vscode-extension/package.json').version")"
-TAG="v$VERSION"
+TAG="v${VERSION}"
 
-echo "📝 Committing and tagging $TAG…"
-git commit -am "Release $TAG"
-git tag "$TAG"
+echo "[release] Committing and tagging ${TAG} ..."
+git commit -am "Release ${TAG}"
+git tag "${TAG}"
 
-echo "🚀 Pushing…"
+echo "[release] Pushing ..."
 git push
-git push origin "$TAG"
+git push origin "${TAG}"
 
-echo "✅ Released $TAG. The 'Publish Extension' GitHub Action will now build and publish"
-echo "   to the VS Code Marketplace and Open VSX. Watch it under the repo's Actions tab."
+echo "[release] Done: ${TAG} pushed. The 'Publish Extension' GitHub Action will build and"
+echo "[release] publish to the VS Code Marketplace and Open VSX. Watch the repo's Actions tab."
