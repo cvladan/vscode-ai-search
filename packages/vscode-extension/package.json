@@ -2,7 +2,7 @@
     "name": "ai-semantic-search",
     "displayName": "AI Search",
     "publisher": "jao",
-    "description": "Semantic code search and indexing for VS Code / VSCodium. Started from zilliztech/claude-context.",
+    "description": "Semantic code search and indexing for VS Code / VSCodium — embeddings, vector search, and optional re-ranking.",
     "version": "0.2.3",
     "private": true,
     "engines": {
