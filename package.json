@@ -1,6 +1,6 @@
 {
     "name": "vscode-ai-search",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "Semantic search and indexing for VS Code / VSCodium using embeddings, vector search and re-ranking.",
     "private": true,
     "workspaces": [

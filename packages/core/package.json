@@ -1,6 +1,6 @@
 {
     "name": "@ai-search/core",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "Core indexing engine for AI Search",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
