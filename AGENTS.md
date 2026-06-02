@@ -89,9 +89,9 @@ committed; `copy-assets.js` copies them from the `tree-sitter-wasms` package int
 
 ## Dependency notes
 
-- The repo uses `legacy-peer-deps=true` (`.npmrc`) because of overlapping peer ranges in
-  some transitive deps, and an `overrides` pin of `ajv@^8` in the root `package.json`
-  (older tooling pulls `ajv@6`, which breaks `ajv-keywords`/`schema-utils` under hoisting).
+- `npm install` works with default settings. No `legacy-peer-deps` or `ajv` override is
+  needed; those were only required by the old LangChain dependency tree, which has been
+  removed.
 - Native modules (`@lancedb/lancedb`, `faiss-node`, `sqlite3`, the native `tree-sitter*`
   grammars) compile on `npm install`. They are **runtime** deps for `core`/MCP-style use;
   the extension only needs them for the LanceDB/Local backends.

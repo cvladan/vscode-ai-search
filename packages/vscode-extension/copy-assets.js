@@ -97,7 +97,7 @@ try {
     // tree-sitter-wasms ships its grammars under <pkg>/out
     treeSitterWasmsDir = path.join(path.dirname(require.resolve('tree-sitter-wasms/package.json')), 'out');
 } catch (error) {
-    console.warn('⚠️  tree-sitter-wasms not found; php/ruby AST will fall back to LangChain.');
+    console.warn('⚠️  tree-sitter-wasms not found; php/ruby AST will fall back to the recursive splitter.');
 }
 
 if (treeSitterWasmsDir && fs.existsSync(treeSitterWasmsDir)) {

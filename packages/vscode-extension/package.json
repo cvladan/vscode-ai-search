@@ -189,12 +189,12 @@
                 "aiSearch.splitter.type": {
                     "type": "string",
                     "enum": [
-                        "langchain",
-                        "ast"
+                        "ast",
+                        "recursive"
                     ],
                     "enumDescriptions": [
-                        "Language-aware text splitter with support for multiple programming languages",
-                        "AST-based code splitter that splits code by logical units (functions, classes, etc.)"
+                        "AST-based code splitter that splits code by logical units like functions and classes, with a recursive fallback",
+                        "Dependency-free recursive character splitter, language-agnostic"
                     ],
                     "default": "ast",
                     "description": "Code splitter type to use for breaking down code into chunks"

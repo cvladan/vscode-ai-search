@@ -29,8 +29,5 @@
     "engines": {
         "node": ">=22.0.0"
     },
-    "overrides": {
-        "ajv": "^8.17.1"
-    },
     "license": "MIT"
 }
