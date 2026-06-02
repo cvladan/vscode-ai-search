@@ -36,6 +36,20 @@ packages/vscode-extension   ai-semantic-search: the extension (bundled with webp
   wasm/                     committed tree-sitter grammar WASMs (build input)
 ```
 
+## READMEs (important)
+
+There are **two** READMEs and they are separate files:
+
+- Root `README.md`: the repository / developer doc.
+- `packages/vscode-extension/README.md`: the **marketplace description**. `vsce` ships this
+  file, so it is what shows on the VS Code Marketplace and Open VSX extension pages.
+
+**Whenever you change the root `README.md`** (features, wording, description), mirror the
+user-facing parts into `packages/vscode-extension/README.md` too, otherwise the marketplace
+page will not reflect the change. Also note the marketplace page only updates when a new
+version is **published** (a `v*` tag runs the Publish workflow); editing the README and
+pushing to `main` alone does not change the marketplace listing.
+
 ## Commands
 
 All from the repo root (npm workspaces):

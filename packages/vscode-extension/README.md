@@ -1,18 +1,20 @@
 # AI Search
 
-Semantic search for VS Code / VSCodium. Index your codebase into a vector database
-and search it by meaning, from the editor sidebar.
+Semantic search for VS Code / VSCodium. Index your codebase, or just a folder of
+Markdown/text files, into a vector database and search it by meaning instead of by
+keyword, from the editor sidebar.
 
-> Started from [zilliztech/claude-context](https://github.com/zilliztech/claude-context)
-> (independent project, not a fork).
+> Started from [zilliztech/claude-context](https://github.com/zilliztech/claude-context),
+> an independent project, not a fork.
 
 ## Features
 
-- 🔍 Semantic search from the activity-bar sidebar
-- 🌳 AST-aware chunking: js/ts, python, java, c/c++, go, rust, c#, scala, **php**, **ruby**
-- 📝 Markdown-aware chunking via a real Markdown AST (headings & `---`)
-- 🔌 Embeddings: OpenAI, **OpenRouter**, VoyageAI, Ollama, Gemini
-- 💾 Vector DBs: Milvus / Zilliz Cloud (default), **LanceDB** (local), **Local FAISS+SQLite**
+- **Semantic search** from the activity-bar sidebar
+- **AST-aware chunking**: js/ts, python, java, c/c++, go, rust, c#, scala, **php**, **ruby**
+- **Markdown-aware chunking** via a real Markdown AST, splitting by headings and `---`
+- **Embeddings**: OpenAI, **OpenRouter**, VoyageAI, Ollama, Gemini
+- **Vector databases**: Milvus / Zilliz Cloud, **LanceDB** local, **Local FAISS+SQLite**
+- **Re-ranking** on demand via OpenRouter Cohere rerank models
 
 ## Usage
 
